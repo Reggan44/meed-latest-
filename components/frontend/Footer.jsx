@@ -7,8 +7,7 @@ const Footer = () => {
             <img className="w-auto h-9" src="/limiLogo.webp" alt="" />
 
             <p className="text-base leading-relaxed text-gray-600 mt-7">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
+              meed collections copyright
             </p>
 
             <ul className="flex items-center space-x-3 mt-9">
