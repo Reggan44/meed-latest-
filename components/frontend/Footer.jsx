@@ -7,7 +7,7 @@ const Footer = () => {
             <img className="w-auto h-9" src="/limiLogo.webp" alt="" />
 
             <p className="text-base leading-relaxed text-gray-600 mt-7">
-              meed collections copyright
+              meed collections copyright 2026
             </p>
 
             <ul className="flex items-center space-x-3 mt-9">
@@ -193,7 +193,7 @@ const Footer = () => {
 
           <div className="col-span-2 md:col-span-1 lg:col-span-2 lg:pl-8">
             <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase">
-              Subscribe to newsletter
+              Subscribe to our newsletter
             </p>
 
             <form action="#" method="POST" className="mt-6">
