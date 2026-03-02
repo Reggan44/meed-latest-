@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import logo from "../../public/limiLogo.webp";
+import logo from "../../public/Logo.png";
 import {
   Boxes,
   Building2,
