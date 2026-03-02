@@ -14,7 +14,7 @@ export default async function page() {
     <div>
       {/* Header */}
       <PageHeader
-        heading="Limi Community Trainings"
+        heading="Meed Community "
         href="/dashboard/community/new"
         linkTitle="Add Training"
       />

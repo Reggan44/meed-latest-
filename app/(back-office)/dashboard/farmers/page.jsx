@@ -14,7 +14,7 @@ export default async function page() {
     <div>
       {/* Header */}
       <PageHeader
-        heading="Farmers"
+        heading="Vendors"
         href="/dashboard/farmers/new"
         linkTitle="Add Farmer"
       />
