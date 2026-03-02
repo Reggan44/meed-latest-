@@ -9,17 +9,17 @@ import { getData } from "@/lib/getData";
 import DataTable from "@/components/data-table-components/DataTable";
 
 export default async function page() {
-  const farmers = await getData("farmers");
+  const vendors = await getData("vendors");
   return (
     <div>
       {/* Header */}
       <PageHeader
         heading="Vendors"
-        href="/dashboard/farmers/new"
-        linkTitle="Add Farmer"
+        href="/dashboard/vendors/new"
+        linkTitle="Add vendor"
       />
       <div className="py-0">
-        <DataTable data={farmers} columns={columns} filterKeys={["name"]} />
+        <DataTable data={vendors} columns={columns} filterKeys={["name"]} />
       </div>
     </div>
   );

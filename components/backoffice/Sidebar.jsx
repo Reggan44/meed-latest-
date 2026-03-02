@@ -51,14 +51,14 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       href: "/dashboard/customers",
     },
     {
-      title: "Markets",
+      title: "Stores",
       icon: Warehouse,
-      href: "/dashboard/markets",
+      href: "/dashboard/Stores",
     },
     {
-      title: "Farmers",
+      title: "Vendors",
       icon: UserSquare2,
-      href: "/dashboard/farmers",
+      href: "/dashboard/vendors",
     },
     {
       title: "Orders",
@@ -76,7 +76,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       href: "/dashboard/staff",
     },
     {
-      title: "Limi Community",
+      title: "Meed Community",
       icon: Building2,
       href: "/dashboard/community",
     },
@@ -86,9 +86,9 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       href: "/dashboard/wallet",
     },
     {
-      title: "Farmer Support",
+      title: "Vendor Support",
       icon: HeartHandshake,
-      href: "/dashboard/farmer-support",
+      href: "/dashboard/vendor-support",
     },
     {
       title: "Settings",
@@ -123,7 +123,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       href: "/dashboard/banners",
     },
   ];
-  if (role === "FARMER") {
+  if (role === "VENDOR") {
     sidebarLinks = [
       {
         title: "Sales",
@@ -136,7 +136,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
         href: "/dashboard/wallet",
       },
       {
-        title: "Farmer Support",
+        title: "Vendorr Support",
         icon: HeartHandshake,
         href: "/dashboard/farmer-support",
       },
@@ -184,7 +184,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
     ];
     catalogueLinks = [];
   }
-  if (role === "FARMER" && userStatus === false) {
+  if (role === "VENDOR" && userStatus === false) {
     sidebarLinks = [];
     catalogueLinks = [];
   }

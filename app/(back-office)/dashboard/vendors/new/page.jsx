@@ -5,7 +5,7 @@ import TextareaInput from "@/components/FormInputs/TextAreaInput";
 import TextInput from "@/components/FormInputs/TextInput";
 import ToggleInput from "@/components/FormInputs/ToggleInput";
 import FormHeader from "@/components/backoffice/FormHeader";
-import NewFarmerForm from "@/components/backoffice/NewFarmerForm";
+import NewVendorForm from "@/components/backoffice/NewVendorForm";
 import { makePostRequest } from "@/lib/apiRequest";
 import { generateCouponCode } from "@/lib/generateCouponCode";
 import { generateSlug } from "@/lib/generateSlug";
@@ -15,11 +15,11 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function NewFarmer() {
+export default function NewVendor() {
   return (
     <div>
-      <FormHeader title="New Farmer" />
-      <NewFarmerForm />
+      <FormHeader title="New Vendor" />
+      <NewVendorForm />
     </div>
   );
 }
