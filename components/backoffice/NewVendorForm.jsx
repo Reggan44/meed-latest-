@@ -103,18 +103,10 @@ export default function NewVendorForm({ user }) {
           errors={errors}
           className="w-full"
         />
-        {/* Accare */}
+       
         <TextInput
-          label="What is the Size of Your Land in Accres"
-          name="landSize"
-          type="number"
-          register={register}
-          errors={errors}
-          className="w-full"
-        />
-        <TextInput
-          label="What is your main Crop that you Cultivate"
-          name="mainCrop"
+          label="What is your main products you sell"
+          name="mainProducts"
           type="text"
           register={register}
           errors={errors}
