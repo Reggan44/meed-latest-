@@ -30,7 +30,7 @@ export default function NewMarketForm({ categories }) {
   const isActive = watch("isActive");
   const router = useRouter();
   function redirect() {
-    router.push("/dashboard/stores");
+    router.push("/dashboard/markets");
   }
   async function onSubmit(data) {
     {
