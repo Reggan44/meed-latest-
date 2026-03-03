@@ -28,10 +28,7 @@ export default async function Home() {
         );
       })}
 
-      <CommunityTrainings
-        title="Featured Trainings"
-        trainings={trainings.slice(0, 3)}
-      />
+      
     </div>
   );
 }

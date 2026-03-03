@@ -30,7 +30,7 @@ export default function NewMarketForm({ categories }) {
   const isActive = watch("isActive");
   const router = useRouter();
   function redirect() {
-    router.push("/dashboard/markets");
+    router.push("/dashboard/stores");
   }
   async function onSubmit(data) {
     {
@@ -51,14 +51,14 @@ export default function NewMarketForm({ categories }) {
   }
   return (
     <div>
-      <FormHeader title="New Market" />
+      <FormHeader title="New Store" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-4xl p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 mx-auto my-3 "
       >
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <TextInput
-            label="Market Title"
+            label="Store Title"
             name="title"
             register={register}
             errors={errors}
@@ -78,16 +78,16 @@ export default function NewMarketForm({ categories }) {
             imageUrl={imageUrl}
             setImageUrl={setImageUrl}
             endpoint="marketLogoUploader"
-            label="Market Logo"
+            label="Store Logo"
           />
           <TextareaInput
-            label="Market Description"
+            label="Store Description"
             name="description"
             register={register}
             errors={errors}
           />
           <ToggleInput
-            label="Market Status"
+            label="Store Status"
             name="isActive"
             trueTitle="Active"
             falseTitle="Draft"
@@ -97,8 +97,8 @@ export default function NewMarketForm({ categories }) {
 
         <SubmitButton
           isLoading={loading}
-          buttonTitle="Create Market"
-          loadingButtonTitle="Creating Market please wait..."
+          buttonTitle="Create Store"
+          loadingButtonTitle="Creating Store please wait..."
         />
       </form>
     </div>

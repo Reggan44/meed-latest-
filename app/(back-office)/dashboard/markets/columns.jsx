@@ -34,7 +34,7 @@ export const columns = [
   },
   {
     accessorKey: "logoUrl",
-    header: "Market Logo",
+    header: "Store Logo",
     cell: ({ row }) => <ImageColumn row={row} accessorKey="logoUrl" />,
   },
   {
@@ -54,7 +54,7 @@ export const columns = [
       return (
         <ActionColumn
           row={row}
-          title="Market"
+          title="Store"
           editEndpoint={`markets/update/${market.id}`}
           endpoint={`markets/${market.id}`}
         />

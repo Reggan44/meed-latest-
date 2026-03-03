@@ -53,7 +53,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
     {
       title: "Stores",
       icon: Warehouse,
-      href: "/dashboard/stores",
+      href: "/dashboard/markets",
     },
     {
       title: "Vendors",

@@ -36,7 +36,7 @@ export default async function Hero() {
         >
           <CircleDollarSign className="shrink-0 w-5 h-5 dark:text-lime-500 text-slate-900" />
           <div className="flex flex-col">
-            <h2 className="uppercase text-sm">Sell on Limi</h2>
+            <h2 className="uppercase text-sm">Sell on Meed</h2>
             <p className="text-[0.6rem]">Million of Vistors</p>
           </div>
         </Link>

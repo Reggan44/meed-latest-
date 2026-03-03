@@ -14,9 +14,9 @@ export default async function page() {
     <div>
       {/* Header */}
       <PageHeader
-        heading="Markets"
+        heading="Stores"
         href="/dashboard/markets/new"
-        linkTitle="Add Market"
+        linkTitle="Add Store"
       />
       <div className="py-0">
         <DataTable data={markets} columns={columns} />
