@@ -10,6 +10,7 @@ export default function MultipleImageInput({
   setImageUrls,
   className = "col-span-full",
   endpoint = "",
+  maxFiles = 4,
 }) {
   function handleImageRemove(imageIndex) {
     const updatedImages = imageUrls.filter(
@@ -31,8 +32,10 @@ export default function MultipleImageInput({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {imageUrls.map((imageUrl, i) => {
             return (
-              <div key={i} className="relative mb-6">
+              <div key={`${imageUrl}-${i}`} className="relative mb-6">
                 <button
+                  type="button"
+                  aria-label="Remove image"
                   onClick={() => handleImageRemove(i)}
                   className="absolute -top-4 -right-2 bg-slate-100 text-slate-900 rounded-full "
                 >
@@ -49,15 +52,16 @@ export default function MultipleImageInput({
             );
           })}
         </div>
-      ) : (
+      ) : null}
+      {imageUrls.length < maxFiles && (
         <UploadDropzone
           endpoint={endpoint}
           onClientUploadComplete={(res) => {
-            console.log(res);
-            const urls = res.map((item) => item.url);
-            setImageUrls(urls);
-            console.log(urls);
-            console.log("Upload Completed");
+            const urls = res
+              .map((item) => item.ufsUrl ?? item.url)
+              .filter(Boolean);
+            setImageUrls([...imageUrls, ...urls].slice(0, maxFiles));
+            toast.success("Images uploaded");
           }}
           onUploadError={(error) => {
             toast.error("Image Upload Failed, Try Again");

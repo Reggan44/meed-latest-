@@ -150,8 +150,8 @@ export default function CustomerForm({ user }) {
 
       <SubmitButton
         isLoading={loading}
-        buttonTitle="Create Farmer"
-        loadingButtonTitle="Creating Farmer please wait..."
+        buttonTitle="Create Shop Owner"
+        loadingButtonTitle="Creating Shop Owner please wait..."
       />
     </form>
   );

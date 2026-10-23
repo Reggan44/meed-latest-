@@ -62,21 +62,21 @@ export default function BasicInformationForm() {
           className="w-full"
         />
         <TextInput
-          label="Farmer's Physical Address"
+          label="Shop Owner's Physical Address"
           name="physicalAddress"
           register={register}
           errors={errors}
           className="w-full"
         />
         <TextInput
-          label="Farmer's Contact Person"
+          label="Shop Owner's Contact Person"
           name="contactPerson"
           register={register}
           errors={errors}
           className="w-full"
         />
         <TextInput
-          label="Farmer's Contact Person Phone"
+          label="Shop Owner's Contact Person Phone"
           name="contactPersonPhone"
           type="tel"
           register={register}

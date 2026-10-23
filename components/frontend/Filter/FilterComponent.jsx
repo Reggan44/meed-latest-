@@ -8,7 +8,7 @@ import FilteredProducts from "./FilteredProducts";
 
 export default function FilterComponent({ category, products }) {
   const { title, slug } = category;
-  const productCount = category.products.length;
+  const productCount = category.total ?? category.products.length;
   return (
     <div>
       <div className="bg-white space-y-6 text-slate-900 py-8 px-4 ">

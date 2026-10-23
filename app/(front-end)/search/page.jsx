@@ -10,19 +10,23 @@ export default async function Search({ searchParams }) {
     max = "",
     page = 1,
     search = "",
+    category: categorySlug = "",
   } = searchParams;
-  const products = await getData(
-    `products/search?search=${search}&page=${page}&sort=${sort}&min=${min}&max=${max}`
+  const result = await getData(
+    `products/search?search=${encodeURIComponent(search)}&page=${page}&sort=${sort}&min=${min}&max=${max}&category=${categorySlug}`
   );
+  const products = Array.isArray(result?.products) ? result.products : [];
+  const total = result?.total ?? products.length;
   const category = {
-    title: search,
+    title: search || categorySlug || "All products",
     slug: "",
     isSearch: true,
     products,
+    total,
   };
   return (
     <div>
-      <FilterComponent category={category} products={products} />
+      <FilterComponent category={category} products={category.products} />
     </div>
   );
 }

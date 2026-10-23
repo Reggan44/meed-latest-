@@ -1,5 +1,7 @@
 import db from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin, requireOwnerOrAdmin, getSessionUser, isAdmin, unauthorized, forbidden, safeUser } from "@/lib/authz";
+
 
 export async function GET(request) {
   try {
@@ -14,7 +16,7 @@ export async function GET(request) {
         profile: true,
       },
     });
-    return NextResponse.json(customers);
+    return NextResponse.json(customers.map(safeUser));
   } catch (error) {
     console.log(error);
     return NextResponse.json(

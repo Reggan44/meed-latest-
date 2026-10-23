@@ -1,7 +1,11 @@
 import db from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin, requireOwnerOrAdmin, getSessionUser, isAdmin, unauthorized, forbidden, safeUser } from "@/lib/authz";
+
 export async function PUT(request, { params: { id } }) {
   try {
+    const denied = await requireOwnerOrAdmin(id);
+    if (denied) return denied;
     const { title, couponCode, expiryDate, isActive } = await request.json();
     const existingUser = await db.coupon.findUnique({
       where: {
@@ -32,7 +36,6 @@ export async function PUT(request, { params: { id } }) {
     return NextResponse.json(
       {
         message: "Failed to Update Coupon",
-        error,
       },
       { status: 500 }
     );

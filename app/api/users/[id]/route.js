@@ -1,5 +1,6 @@
 import db from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin, safeUser } from "@/lib/authz";
 
 export async function GET(request, { params: { id } }) {
   try {
@@ -22,7 +23,6 @@ export async function GET(request, { params: { id } }) {
     return NextResponse.json(
       {
         message: "Failed to Fetch User",
-        error,
       },
       { status: 500 }
     );
@@ -30,6 +30,8 @@ export async function GET(request, { params: { id } }) {
 }
 export async function DELETE(request, { params: { id } }) {
   try {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     const existingUser = await db.user.findUnique({
       where: {
         id,
@@ -49,13 +51,12 @@ export async function DELETE(request, { params: { id } }) {
         id,
       },
     });
-    return NextResponse.json(deletedUser);
+    return NextResponse.json(safeUser(deletedUser));
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Delete User",
-        error,
       },
       { status: 500 }
     );

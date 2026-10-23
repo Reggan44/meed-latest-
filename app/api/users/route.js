@@ -4,12 +4,39 @@ import db from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import base64url from "base64url";
 import { Resend } from "resend";
+import { rateLimit, clientIp } from "@/lib/rateLimit";
+import { getSessionUser, isAdmin, requireAdmin, safeUser } from "@/lib/authz";
 // import { EmailTemplate } from "@/components/email-template";
 export async function POST(request) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
     //extract the credentials
-    const { name, email, password, role, plan } = await request.json();
+    if (!rateLimit(`register:${clientIp(request)}`, 10, 60 * 60 * 1000).ok) {
+      return NextResponse.json(
+        { message: "Too many sign-ups from this network. Try again later." },
+        { status: 429 }
+      );
+    }
+    const { name, email, password, role: requestedRole, plan } =
+      await request.json();
+    if (
+      typeof email !== "string" ||
+      !/^\S+@\S+\.\S+$/.test(email) ||
+      typeof password !== "string" ||
+      password.length < 8
+    ) {
+      return NextResponse.json(
+        { data: null, message: "A valid email and a password of at least 8 characters are required" },
+        { status: 400 }
+      );
+    }
+    // Public sign-up may only create shoppers or sellers; staff roles need an admin.
+    const PUBLIC_ROLES = ["USER", "FARMER", "VENDOR"];
+    const caller = await getSessionUser();
+    const role = PUBLIC_ROLES.includes(requestedRole)
+      ? requestedRole
+      : isAdmin(caller) && ["ADMIN", "MODERATOR"].includes(requestedRole)
+      ? requestedRole
+      : "USER";
     //Check if the user Already exists in the db
     const existingUser = await db.user.findUnique({
       where: {
@@ -29,7 +56,6 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(password, 10);
     // Generate a random UUID (version 4)
     const rawToken = uuidv4();
-    console.log(rawToken);
     // Encode the token using Base64 URL-safe format
     const token = base64url.encode(rawToken);
     // Create a User in the DB
@@ -43,7 +69,6 @@ export async function POST(request) {
         verificationToken: token,
       },
     });
-    console.log(newUser);
     // SEND THE EMAIL IF USER ROLE == FARMER
     // if (role === "FARMER") {
     //   //Send an Email with the Token on the link as a search param
@@ -70,7 +95,7 @@ export async function POST(request) {
     // }
     return NextResponse.json(
       {
-        data: newUser,
+        data: safeUser(newUser),
         message: "User Created Successfully",
       },
       { status: 201 }
@@ -79,7 +104,6 @@ export async function POST(request) {
     console.log(error);
     return NextResponse.json(
       {
-        error,
         message: "Server Error: Something went wrong",
       },
       { status: 500 }
@@ -93,13 +117,15 @@ export async function GET(request) {
         createdAt: "desc",
       },
     });
-    return NextResponse.json(users);
+    const safeUsers = users.map(
+      ({ password, verificationToken, ...rest }) => rest
+    );
+    return NextResponse.json(safeUsers);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Fetch Users",
-        error,
       },
       { status: 500 }
     );

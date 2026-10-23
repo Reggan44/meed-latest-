@@ -1,75 +1,57 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
 import db from "@/lib/db";
-import { v4 as uuidv4 } from "uuid";
-import base64url from "base64url";
+import { randomBytes } from "crypto";
+import { hashToken } from "@/lib/resetToken";
+import { rateLimit, clientIp } from "@/lib/rateLimit";
 import { Resend } from "resend";
 import { EmailTemplate } from "@/components/email-template";
 export async function PUT(request) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const generic = NextResponse.json(
+    { data: null, message: "If that email exists, a reset link has been sent." },
+    { status: 200 }
+  );
   try {
-    //extract the data
     const { email } = await request.json();
-    //Check if the user Already exists in the db
-    const existingUser = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    if (!existingUser) {
+    if (typeof email !== "string" || !email) return generic;
+    const ip = clientIp(request);
+    if (
+      !rateLimit(`forgot:ip:${ip}`, 5, 15 * 60 * 1000).ok ||
+      !rateLimit(`forgot:email:${email.toLowerCase()}`, 3, 15 * 60 * 1000).ok
+    ) {
       return NextResponse.json(
-        {
-          data: null,
-          message: `User Not Found`,
-        },
-        { status: 404 }
+        { message: "Too many requests. Please try again later." },
+        { status: 429 }
       );
     }
-    //Generate Token
-    // Generate a random UUID (version 4)
-    const rawToken = uuidv4();
-    console.log(rawToken);
-    // Encode the token using Base64 URL-safe format
-    const token = base64url.encode(rawToken);
-    const linkText = "Reset Password";
-    const userId = existingUser.id;
-    const name = existingUser.name;
-    const redirectUrl = `reset-password?token=${token}&id=${userId}`;
-    const description =
-      "Click on the following link in order to reset your password. Thank you";
-    const subject = "Password Reset - Limi Ecommerce";
-    console.log(userId, name, redirectUrl);
-    const sendMail = await resend.emails.send({
+    const existingUser = await db.user.findUnique({ where: { email } });
+    if (!existingUser) return generic;
+
+    // Only the hash is stored; the raw token exists only in the emailed link.
+    const token = randomBytes(32).toString("hex");
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: {
+        resetTokenHash: hashToken(token),
+        resetTokenExpires: new Date(Date.now() + 60 * 60 * 1000),
+      },
+    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    await resend.emails.send({
       from: "Desishub <info@jazzafricaadventures.com>",
       to: email,
-      subject: subject,
+      subject: "Password Reset - Meed Collections",
       react: EmailTemplate({
-        name,
-        redirectUrl,
-        linkText,
-        description,
-        subject,
+        name: existingUser.name,
+        redirectUrl: `reset-password?token=${token}&id=${existingUser.id}`,
+        linkText: "Reset Password",
+        description:
+          "Click on the following link in order to reset your password. The link expires in 1 hour.",
+        subject: "Password Reset - Meed Collections",
       }),
     });
-    // console.log(sendMail);
-    //Upon Click redirect them to the login
-
-    console.log(token);
-    return NextResponse.json(
-      {
-        data: null,
-        message: "User Updated Successfully",
-      },
-      { status: 201 }
-    );
+    return generic;
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      {
-        error,
-        message: "Server Error: Something went wrong",
-      },
-      { status: 500 }
-    );
+    console.error("forgot-password failed:", error?.message);
+    return generic;
   }
 }

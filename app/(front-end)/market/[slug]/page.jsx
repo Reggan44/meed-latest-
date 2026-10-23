@@ -11,8 +11,8 @@ export default async function page({ params: { slug } }) {
   // console.log(marketCategoryIds);
 
   const categoriesData = await getData("categories");
-  const categories = categoriesData.filter((category) => {
-    return category.products.length > 3;
+  const categories = (Array.isArray(categoriesData) ? categoriesData : []).filter((category) => {
+    return (category.products?.length ?? 0) > 3;
   });
   const marketCategories = categories.filter((category) =>
     marketCategoryIds.includes(category.id)

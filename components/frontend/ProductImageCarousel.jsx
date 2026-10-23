@@ -22,7 +22,7 @@ export default function ProductImageCarousel({
 }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
-    <div className="col-span-3">
+    <div className="col-span-12 md:col-span-6 lg:col-span-3 min-w-0">
       {productImages.length <= 0 ? (
         <Image
           src={thumbnail}

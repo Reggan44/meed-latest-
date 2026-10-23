@@ -12,21 +12,27 @@ import React from "react";
 export default async function ProductDetailPage({ params: { slug } }) {
   const product = await getData(`products/product/${slug}`);
   const { id } = product;
+  const discount =
+    product.productPrice > product.salePrice && product.productPrice > 0
+      ? Math.round(
+          ((product.productPrice - product.salePrice) / product.productPrice) * 100
+        )
+      : 0;
   const catId = product.categoryId;
   const category = await getData(`categories/${catId}`);
-  const categoryProducts = category.products;
+  const categoryProducts = category?.products ?? [];
   const products = categoryProducts.filter((product) => product.id !== id);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const urlToShare = `${baseUrl}/products/${slug}`;
   return (
     <div>
       <Breadcrumb />
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-x-0 gap-y-6 md:gap-8">
         <ProductImageCarousel
           productImages={product.productImages}
           thumbnail={product.imageUrl}
         />
-        <div className="col-span-6">
+        <div className="col-span-12 md:col-span-6 lg:col-span-6 min-w-0">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl lg:text-3xl font-semibold">
               {product.title}
@@ -44,72 +50,43 @@ export default async function ProductDetailPage({ params: { slug } }) {
           </div>
           <div className="flex items-center justify-between gap-4 pt-4 border-b border-gray-500 pb-4">
             <div className="flex items-center gap-4">
-              <h4 className="text-2xl">UGX{product.salePrice}</h4>
+              <h4 className="text-2xl">Ksh {product.salePrice}</h4>
               <del className="text-slate-400 text-sm">
-                UGX {product.productPrice}
+                Ksh {product.productPrice}
               </del>
             </div>
-            <p className="flex items-center">
-              <Tag className="w-5 h-5 text-slate-400 me-2" />
-              <span>Save 50% right now</span>
-            </p>
+            {discount > 0 && (
+              <p className="flex items-center">
+                <Tag className="w-5 h-5 text-slate-400 me-2" />
+                <span>Save {discount}% right now</span>
+              </p>
+            )}
           </div>
           <div className="flex justify-between items-center py-6">
             <AddToCartButton product={product} />
-            <p>Something Here</p>
           </div>
         </div>
-        <div className="col-span-3 sm:block bg-white border border-gray-300 rounded-lg  dark:bg-gray-700 dark:border-gray-700 text-slate-800 overflow-hidden hidden">
+        <aside className="col-span-12 lg:col-span-3 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden self-start">
           <h2 className="bg-slate-100 dark:bg-gray-800 py-3 px-6 font-semibold border-b border-gray-300 dark:border-gray-600 text-slate-800 dark:text-slate-100">
             DELIVERY & RETURNS
           </h2>
-
-          <div className="p-4">
-            <div className="flex rounded-lg py-2 px-4 bg-orange-400 text-slate-50 items-center gap-3">
-              <span>Limi Express </span>
-              <Send />
-            </div>
-            <div className="py-3 text-slate-100 border-b border-gray-500">
-              Eligible for Free Delivery.
-              <Link href="#">View Details</Link>
-            </div>
-            <h2 className="text-slate-200 py-2">Choose your Location</h2>
-            <div className=" pb-3">
-              <select
-                id="countries"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>France</option>
-                <option>Germany</option>
-              </select>
-            </div>
-
-            <div className="pb-3">
-              <select
-                id="countries"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>France</option>
-                <option>Germany</option>
-              </select>
-            </div>
-            <div className="pb-3">
-              <select
-                id="countries"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option>United States</option>
-                <option>Canada</option>
-                <option>France</option>
-                <option>Germany</option>
-              </select>
-            </div>
-          </div>
-        </div>
+          <ul className="p-4 space-y-3 text-sm text-slate-700 dark:text-slate-200">
+            <li className="flex gap-2">
+              <Send className="w-4 h-4 mt-0.5 shrink-0" />
+              Delivery available across Kenya. Fee and timing are confirmed by the shop after you order.
+            </li>
+            <li className="flex gap-2">
+              <Tag className="w-4 h-4 mt-0.5 shrink-0" />
+              Prices are in Kenyan Shillings (Ksh).
+            </li>
+            <li>
+              Questions about this item?{" "}
+              <Link href="/support" className="underline">
+                Contact support
+              </Link>
+            </li>
+          </ul>
+        </aside>
       </div>
       <div className="bg-white dark:bg-slate-700 my-8 rounded-xl p-4">
         <h2 className="mb-4 text-xl font-semibold text-slate-200 ml-3">

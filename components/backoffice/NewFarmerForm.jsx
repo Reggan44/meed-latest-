@@ -48,7 +48,7 @@ export default function NewFarmerForm({ user }) {
       setLoading,
       "api/farmers",
       data,
-      "Farmer Profile",
+      "Shop Owner Profile",
       reset,
       redirect
     );
@@ -60,14 +60,14 @@ export default function NewFarmerForm({ user }) {
     >
       <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
         <TextInput
-          label="Farmer's Full Name"
+          label="Shop Owner's Full Name"
           name="name"
           register={register}
           errors={errors}
           className="w-full"
         />
         <TextInput
-          label="Farmer's Phone"
+          label="Shop Owner's Phone"
           name="phone"
           type="tel"
           register={register}
@@ -75,28 +75,28 @@ export default function NewFarmerForm({ user }) {
           className="w-full"
         />
         <TextInput
-          label="Farmer's Email Address"
+          label="Shop Owner's Email Address"
           name="email"
           register={register}
           errors={errors}
           className="w-full"
         />
         <TextInput
-          label="Farmer's Physical Address"
+          label="Shop Owner's Physical Address"
           name="physicalAddress"
           register={register}
           errors={errors}
           className="w-full"
         />
         <TextInput
-          label="Farmer's Contact Person"
+          label="Shop Owner's Contact Person"
           name="contactPerson"
           register={register}
           errors={errors}
           className="w-full"
         />
         <TextInput
-          label="Farmer's Contact Person Phone"
+          label="Shop Owner's Contact Person Phone"
           name="contactPersonPhone"
           type="tel"
           register={register}
@@ -130,10 +130,10 @@ export default function NewFarmerForm({ user }) {
           imageUrl={imageUrl}
           setImageUrl={setImageUrl}
           endpoint="farmerProfileUploader"
-          label="Farmer Profile Image"
+          label="Shop Owner Profile Image"
         />
         <TextareaInput
-          label="Farmer's Payment Terms"
+          label="Shop Owner's Payment Terms"
           name="terms"
           register={register}
           errors={errors}
@@ -147,7 +147,7 @@ export default function NewFarmerForm({ user }) {
           isRequired={false}
         />
         <ToggleInput
-          label="Farmer Status"
+          label="Shop Owner Status"
           name="isActive"
           trueTitle="Active"
           falseTitle="Draft"
@@ -157,8 +157,8 @@ export default function NewFarmerForm({ user }) {
 
       <SubmitButton
         isLoading={loading}
-        buttonTitle="Create Farmer"
-        loadingButtonTitle="Creating Farmer please wait..."
+        buttonTitle="Create Shop Owner"
+        loadingButtonTitle="Creating Shop Owner please wait..."
       />
     </form>
   );

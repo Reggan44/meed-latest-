@@ -13,9 +13,10 @@ import React from "react";
 export default async function page() {
   const session = await getServerSession(authOptions);
   const role = session?.user?.role;
-  const sales = await getData("sales");
-  const orders = await getData("orders");
-  const products = await getData("products");
+  const salesRaw = await getData("sales");
+  const ordersRaw = await getData("orders");
+  const sales = Array.isArray(salesRaw) ? salesRaw : [];
+  const orders = Array.isArray(ordersRaw) ? ordersRaw : [];
   if (role === "USER") {
     return <UserDashboard />;
   }

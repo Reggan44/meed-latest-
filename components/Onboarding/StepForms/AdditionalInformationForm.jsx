@@ -48,10 +48,10 @@ export default function AdditionalInformationForm() {
           imageUrl={imageUrl}
           setImageUrl={setImageUrl}
           endpoint="farmerProfileUploader"
-          label="Farmer Profile Image"
+          label="Shop Owner Profile Image"
         />
         <TextareaInput
-          label="Farmer's Payment Terms"
+          label="Shop Owner's Payment Terms"
           name="terms"
           register={register}
           errors={errors}

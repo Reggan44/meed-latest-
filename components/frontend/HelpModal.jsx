@@ -22,7 +22,7 @@ export default function HelpModal() {
         className="flex items-center space-x-1 text-green-950 dark:text-slate-100"
       >
         <HelpCircle />
-        <span>Help</span>
+        <span className="hidden sm:inline">Help</span>
       </button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>

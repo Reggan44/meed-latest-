@@ -8,13 +8,13 @@ export default async function FilteredProducts({
   isSearch,
 }) {
   // PAGINATION
-  const pageSize = 3;
+  const pageSize = 24;
   const totalPages = Math.ceil(productCount / pageSize);
   return (
     <div className="">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
         {products.map((product, i) => {
-          return <Product product={product} key={i} />;
+          return <Product product={product} key={i} inGrid />;
         })}
       </div>
       <div className="p-8 mx-auto flex items-center justify-center  w-full">

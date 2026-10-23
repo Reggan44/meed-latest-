@@ -7,23 +7,19 @@ export async function GET(request) {
   const min = request.nextUrl.searchParams.get("min");
   const max = request.nextUrl.searchParams.get("max");
   const page = request.nextUrl.searchParams.get("page") || 1;
-  const pageSize = 3;
-  console.log(sortBy);
-  let where = {
-    OR: [
-      {
-        title: { contains: searchTerm, mode: "insensitive" },
-      },
-      {
-        category: {
-          title: { contains: searchTerm, mode: "insensitive" },
-        },
-      },
-      {
-        description: { contains: searchTerm, mode: "insensitive" },
-      },
-    ],
-  };
+  const categorySlug = request.nextUrl.searchParams.get("category");
+  const pageSize = 24;
+  let where = {};
+  if (searchTerm) {
+    where.OR = [
+      { title: { contains: searchTerm, mode: "insensitive" } },
+      { category: { title: { contains: searchTerm, mode: "insensitive" } } },
+      { description: { contains: searchTerm, mode: "insensitive" } },
+    ];
+  }
+  if (categorySlug) {
+    where.category = { slug: categorySlug };
+  }
   if (min && max) {
     where.salePrice = {
       gte: parseFloat(min),
@@ -39,6 +35,7 @@ export async function GET(request) {
     };
   }
   try {
+    const total = await db.product.count({ where });
     const products = await db.product.findMany({
       where,
       skip: (parseInt(page) - 1) * parseInt(pageSize),
@@ -47,13 +44,12 @@ export async function GET(request) {
         salePrice: sortBy === "asc" ? "asc" : "desc",
       },
     });
-    return NextResponse.json(products);
+    return NextResponse.json({ products, total });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Fetch Products",
-        error,
       },
       { status: 500 }
     );

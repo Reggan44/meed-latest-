@@ -14,6 +14,7 @@ import { Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import MultipleImageInput from "../FormInputs/MultipleImageInput";
 
@@ -23,10 +24,14 @@ export default function NewProductForm({
   updateData = {},
 }) {
   console.log(updateData);
-  const initialImageUrl = updateData?.imageUrl ?? "";
+  const initialProductImages =
+    updateData?.productImages?.length > 0
+      ? updateData.productImages
+      : updateData?.imageUrl
+      ? [updateData.imageUrl]
+      : [];
   const initialTags = updateData?.tags ?? [];
   const id = updateData?.id ?? "";
-  const [imageUrl, setImageUrl] = useState(initialImageUrl);
   // TAGS
   const [tags, setTags] = useState(initialTags);
   console.log(tags);
@@ -41,7 +46,10 @@ export default function NewProductForm({
     defaultValues: {
       isActive: true,
       isWholesale: false,
+      categoryId: categories?.[0]?.id ?? "",
+      farmerId: farmers?.[0]?.id ?? "",
       ...updateData,
+      ...(updateData?.userId ? { farmerId: updateData.userId } : {}),
     },
   });
   const isActive = watch("isActive");
@@ -51,9 +59,17 @@ export default function NewProductForm({
   function redirect() {
     router.push("/dashboard/products");
   }
-  const [productImages, setProductImages] = useState([]);
+  const [productImages, setProductImages] = useState(initialProductImages);
   console.log(productImages);
   async function onSubmit(data) {
+    if (!data.farmerId || !data.categoryId) {
+      toast.error("Please select a category and a shop owner");
+      return;
+    }
+    if (productImages.length === 0) {
+      toast.error("Please upload at least one product image");
+      return;
+    }
     const slug = generateSlug(data.title);
     const productCode = generateUserCode("LLP", data.title);
     data.slug = slug;
@@ -79,10 +95,12 @@ export default function NewProductForm({
         "api/products",
         data,
         "Product",
-        reset,
+        () => {
+          reset();
+          setProductImages([]);
+        },
         redirect
       );
-      setProductImages([]);
       setTags([]);
     }
   }
@@ -153,7 +171,7 @@ export default function NewProductForm({
           options={categories}
         />
         <SelectInput
-          label="Select Farmer"
+          label="Select Shop Owner"
           name="farmerId"
           register={register}
           errors={errors}

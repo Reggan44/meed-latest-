@@ -1,13 +1,13 @@
-import { getData } from "@/lib/getData";
+import { getCategoriesWithProducts } from "@/lib/storefront";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 export default async function SidebarCategories() {
-  const categoriesData = await getData("categories");
+  const categoriesData = await getCategoriesWithProducts();
   // Only categories with Products
-  const categories = categoriesData.filter(
-    (category) => category.products.length > 0
+  const categories = (Array.isArray(categoriesData) ? categoriesData : []).filter(
+    (category) => (category.products?.length ?? 0) > 0
   );
   // console.log(categories);
   return (
@@ -24,13 +24,19 @@ export default async function SidebarCategories() {
                 href={`/category/${category.slug}`}
                 className="flex items-center gap-3 hover:bg-slate-50 duration-300 transition-all dark:text-slate-300 dark:hover:bg-slate-600 rounded-md"
               >
-                <Image
-                  width={556}
-                  height={556}
-                  className="w-10 h-10 rounded-full object-cover border border-lime-300"
-                  src={category.imageUrl}
-                  alt={category.title}
-                />
+                {category.imageUrl ? (
+                  <Image
+                    width={556}
+                    height={556}
+                    className="w-10 h-10 rounded-full object-cover border border-lime-300"
+                    src={category.imageUrl}
+                    alt={category.title}
+                  />
+                ) : (
+                  <span className="w-10 h-10 shrink-0 rounded-full bg-lime-600 text-white flex items-center justify-center font-semibold uppercase">
+                    {category.title?.[0]}
+                  </span>
+                )}
                 <span className="text-sm">{category.title}</span>
               </Link>
             );

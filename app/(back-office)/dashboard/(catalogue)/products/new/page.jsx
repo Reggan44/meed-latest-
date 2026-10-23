@@ -6,12 +6,14 @@ import React from "react";
 export default async function NewProduct() {
   //Categories and Farmers
   const categoriesData = await getData("categories");
-  const usersData = (await getData("users")) ?? [];
+  const usersDataRaw = await getData("users");
+  const usersData = Array.isArray(usersDataRaw) ? usersDataRaw : [];
+  const categories = Array.isArray(categoriesData) ? categoriesData : [];
   // Example loading state
-  if (!categoriesData || !usersData) {
+  if (!categoriesData) {
     return <div>Loading...</div>;
   }
-  const farmersData = usersData?.filter((user) => user.role === "FARMER") ?? [];
+  const farmersData = usersData.filter((user) => user.role && user.role !== "USER");
   const farmers = farmersData.map((farmer) => {
     return {
       id: farmer.id,
@@ -19,7 +21,7 @@ export default async function NewProduct() {
     };
   });
   // console.log(farmers);
-  const categories = categoriesData.map((category) => {
+  const categoryOptions = categories.map((category) => {
     return {
       id: category.id,
       title: category.title,
@@ -28,7 +30,7 @@ export default async function NewProduct() {
   return (
     <div>
       <FormHeader title="New Product" />
-      <NewProductForm categories={categories} farmers={farmers} />
+      <NewProductForm categories={categoryOptions} farmers={farmers} />
     </div>
   );
 }

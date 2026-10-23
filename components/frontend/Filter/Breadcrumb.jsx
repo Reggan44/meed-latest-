@@ -7,7 +7,7 @@ import React from "react";
 export default function Breadcrumb({ title, resultCount }) {
   const searchParams = useSearchParams();
   const currentPage = searchParams.get("page") || 1;
-  const pageSize = 3;
+  const pageSize = 24;
   const startRange = (currentPage - 1) * pageSize + 1;
   const endRange = Math.min(currentPage * pageSize, resultCount);
 

@@ -33,7 +33,7 @@ export default function Summary({ farmerId }) {
       setLoading,
       "api/farmers",
       data,
-      "Farmer Profile",
+      "Shop Owner Profile",
       reset,
       redirect
     );

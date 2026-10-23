@@ -1,5 +1,7 @@
 import db from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin, requireOwnerOrAdmin, getSessionUser, isAdmin, unauthorized, forbidden, safeUser } from "@/lib/authz";
+
 
 export async function GET(request, { params: { id } }) {
   try {
@@ -11,13 +13,12 @@ export async function GET(request, { params: { id } }) {
         vendorProfile: true,
       },
     });
-    return NextResponse.json(vendor);
+    return NextResponse.json(safeUser(vendor));
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Fetch Vendor",
-        error,
       },
       { status: 500 }
     );
@@ -26,6 +27,8 @@ export async function GET(request, { params: { id } }) {
 
 export async function DELETE(request, { params: { id } }) {
   try {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     const existingUser = await db.user.findUnique({
       where: {
         id,
@@ -45,13 +48,12 @@ export async function DELETE(request, { params: { id } }) {
         id,
       },
     });
-    return NextResponse.json(deletedUser);
+    return NextResponse.json(safeUser(deletedUser));
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Delete User",
-        error,
       },
       { status: 500 }
     );
@@ -60,6 +62,8 @@ export async function DELETE(request, { params: { id } }) {
 
 export async function PUT(request, { params: { id } }) {
   try {
+    const denied = await requireAdmin();
+    if (denied) return denied;
     const { status, emailVerified } = await request.json();
     const existingUser = await db.user.findUnique({
       where: {
@@ -79,13 +83,12 @@ export async function PUT(request, { params: { id } }) {
       where: { id },
       data: { status, emailVerified },
     });
-    return NextResponse.json(updatedUser);
+    return NextResponse.json(safeUser(updatedUser));
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Update User",
-        error,
       },
       { status: 500 }
     );

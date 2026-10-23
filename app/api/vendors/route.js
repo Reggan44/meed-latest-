@@ -1,5 +1,8 @@
 import db from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin, requireOwnerOrAdmin, getSessionUser, isAdmin, unauthorized, forbidden, safeUser } from "@/lib/authz";
+
+
 
 export async function POST(request) {
   try {
@@ -21,6 +24,9 @@ export async function POST(request) {
       userId */
     // Update the Verification in the user
     const vendorData = await request.json();
+    const sessionUser = await getSessionUser();
+    if (!sessionUser) return unauthorized();
+    if (!isAdmin(sessionUser) && vendorData.userId !== sessionUser.id) return forbidden();
     //Check if the user Already exists in the db
     const existingUser = await db.user.findUnique({
       where: {
@@ -91,7 +97,7 @@ export async function GET(request) {
         vendorProfile: true,
       },
     });
-    return NextResponse.json(vendors);
+    return NextResponse.json(vendors.map(safeUser));
   } catch (error) {
     console.log(error);
     return NextResponse.json(

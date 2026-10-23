@@ -9,11 +9,11 @@ export async function PUT(request) {
         id,
       },
     });
-    if (!user) {
+    if (!user || !token || user.verificationToken !== token) {
       return NextResponse.json(
         {
           data: null,
-          message: "No User Found",
+          message: "Invalid verification link",
         },
         { status: 404 }
       );
@@ -24,16 +24,15 @@ export async function PUT(request) {
       },
       data: {
         emailVerified: true,
-        verificationRequestCount: parseInt(user.verificationRequestCount) + 1,
+        verificationToken: null,
       },
     });
-    return NextResponse.json(updatedUser);
+    return NextResponse.json({ message: "Email verified" });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       {
         message: "Failed to Update User",
-        error,
       },
       { status: 500 }
     );

@@ -12,38 +12,33 @@ import { useSession } from "next-auth/react";
 import UserAvatar from "../backoffice/UserAvatar";
 export default function Navbar() {
   const { data: session, status } = useSession();
-  if (status === "loading") {
-    return <p>Loading...</p>;
-  }
-
   return (
     <div className="bg-white dark:bg-slate-700">
-      <div className="flex items-center justify-between py-3 max-w-6xl mx-auto px-8 gap-8">
-        {/* Logo */}
-        <Link className="" href="/">
-          <Image src={logo} alt="limifood logo" className="w-24" />
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:px-8 md:flex-nowrap md:gap-8">
+        <Link href="/" className="shrink-0">
+          <Image src={logo} alt="Meed Collections logo" className="w-20 md:w-24" />
         </Link>
-        {/* SEARCH */}
-        <div className="flex-grow">
+        <div className="order-last w-full md:order-none md:w-auto md:flex-grow">
           <SearchForm />
         </div>
-        <div className="flex gap-8">
-          {status === "unauthenticated" ? (
+        <div className="flex items-center gap-3 sm:gap-6">
+          {status === "loading" ? (
+            <div className="h-10 w-10" />
+          ) : status === "unauthenticated" ? (
             <Link
               href="/login"
               className="flex items-center space-x-1 text-green-950 dark:text-slate-100"
             >
               <User />
-              <span>Login</span>
+              <span className="hidden sm:inline">Login</span>
             </Link>
           ) : (
             <UserAvatar user={session?.user} />
           )}
-
           <HelpModal />
           <CartCount />
+          <ThemeSwitcherBtn />
         </div>
-        <ThemeSwitcherBtn />
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import db from "@/lib/db";
 import { NextResponse } from "next/server";
+import { requireAdmin, requireOwnerOrAdmin, getSessionUser, isAdmin, unauthorized, forbidden, safeUser } from "@/lib/authz";
+
 
 export async function GET(request, { params: { id } }) {
   try {
@@ -14,7 +16,6 @@ export async function GET(request, { params: { id } }) {
     return NextResponse.json(
       {
         message: "Failed to Fetch Coupon",
-        error,
       },
       { status: 500 }
     );
@@ -37,6 +38,8 @@ export async function DELETE(request, { params: { id } }) {
         { status: 404 }
       );
     }
+    const denied = await requireOwnerOrAdmin(existingCoupon.vendorId);
+    if (denied) return denied;
     const deletedCoupon = await db.coupon.delete({
       where: {
         id,
@@ -48,7 +51,6 @@ export async function DELETE(request, { params: { id } }) {
     return NextResponse.json(
       {
         message: "Failed to Delete Coupon",
-        error,
       },
       { status: 500 }
     );
@@ -72,6 +74,8 @@ export async function PUT(request, { params: { id } }) {
         { status: 404 }
       );
     }
+    const denied = await requireOwnerOrAdmin(existingCoupon.vendorId);
+    if (denied) return denied;
     const updatedCoupon = await db.coupon.update({
       where: { id },
       data: {
@@ -87,7 +91,6 @@ export async function PUT(request, { params: { id } }) {
     return NextResponse.json(
       {
         message: "Failed to Update Coupon",
-        error,
       },
       { status: 500 }
     );

@@ -4,7 +4,43 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Download } from "lucide-react";
 import { DataTableViewOptions } from "./DataTableViewOptions";
+
+function escapeCell(value) {
+  let text =
+    value === null || value === undefined
+      ? ""
+      : typeof value === "object"
+      ? JSON.stringify(value)
+      : String(value);
+  // Prevent spreadsheet formula injection
+  if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function exportCsv(table) {
+  const selected = table.getSelectedRowModel().rows;
+  const rows = selected.length > 0 ? selected : table.getPrePaginationRowModel().rows;
+  const columns = table
+    .getAllLeafColumns()
+    .filter((col) => col.accessorFn && col.getIsVisible());
+  if (rows.length === 0) return;
+  const header = columns.map((col) =>
+    escapeCell(typeof col.columnDef.header === "string" ? col.columnDef.header : col.id)
+  );
+  const lines = rows.map((row) =>
+    columns.map((col) => escapeCell(row.getValue(col.id))).join(",")
+  );
+  const csv = [header.join(","), ...lines].join("\n");
+  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `export-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
 
 export function DataTableToolbar({ table, filterKeys }) {
   //IF any of the keys have a value
@@ -46,7 +82,18 @@ export function DataTableToolbar({ table, filterKeys }) {
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8"
+          onClick={() => exportCsv(table)}
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Export
+        </Button>
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   );
 }

@@ -1,25 +1,25 @@
-import Heading from "@/components/backoffice/Heading";
 import PageHeader from "@/components/backoffice/PageHeader";
-import TableActions from "@/components/backoffice/TableActions";
-
-import Link from "next/link";
+import DataTable from "@/components/data-table-components/DataTable";
+import { getData } from "@/lib/getData";
 import React from "react";
+import { columns } from "./columns";
 
-export default function Coupons() {
+const STAFF_ROLES = ["ADMIN", "MODERATOR"];
+
+export default async function Staff() {
+  const users = await getData("users");
+  const staff = (Array.isArray(users) ? users : []).filter((user) =>
+    STAFF_ROLES.includes(user.role)
+  );
   return (
     <div>
-      {/* Header */}
       <PageHeader
         heading="Staff"
         href="/dashboard/staff/new"
         linkTitle="Add Staff"
       />
-      {/* Table Actions */}
-      {/* Export  || Search || Bulk Delete */}
-      <TableActions />
-
-      <div className="py-8">
-        <h2>Table</h2>
+      <div className="py-0">
+        <DataTable data={staff} columns={columns} filterKeys={["name"]} />
       </div>
     </div>
   );

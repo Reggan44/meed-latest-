@@ -136,9 +136,9 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
         href: "/dashboard/wallet",
       },
       {
-        title: "Vendorr Support",
+        title: "Vendor Support",
         icon: HeartHandshake,
-        href: "/dashboard/farmer-support",
+        href: "/dashboard/vendor-support",
       },
       {
         title: "Settings",

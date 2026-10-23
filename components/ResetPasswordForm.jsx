@@ -21,7 +21,7 @@ export default function ResetPasswordForm() {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const id = searchParams.get("id");
     data.id = id;
-    console.log(data);
+    data.token = searchParams.get("token");
     try {
       setLoading(true);
       const response = await fetch(`${baseUrl}/api/users/update-password`, {
@@ -38,7 +38,7 @@ export default function ResetPasswordForm() {
         toast.success("Password Updated Successfully");
       } else {
         setLoading(false);
-        toast.error("Something Went wrong");
+        toast.error((await response.json().catch(() => null))?.message || "Something went wrong");
       }
     } catch (error) {
       setLoading(false);

@@ -4,25 +4,31 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-export default function BestSellingProductsChart() {
+const COLORS = [
+  "rgba(0, 0, 255, 0.7)",
+  "rgba(255, 0, 221, 0.7)",
+  "rgba(2, 139, 71, 0.7)",
+  "rgba(234, 138, 0, 0.7)",
+  "rgba(0, 0, 0, 0.7)",
+];
+
+export default function BestSellingProductsChart({ sales = [] }) {
+  const totals = {};
+  sales.forEach((sale) => {
+    const key = sale.productTitle ?? "Unknown";
+    totals[key] = (totals[key] ?? 0) + (sale.productQty ?? 0);
+  });
+  const top = Object.entries(totals)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
   const data = {
-    labels: ["Cabbage", "Watermelon", "Broccoli", "Maize"],
+    labels: top.map(([title]) => title),
     datasets: [
       {
-        label: "# of Votes",
-        data: [50, 10, 20, 20],
-        backgroundColor: [
-          "rgba(0, 0, 255, 0.7)",
-          "rgba(255, 0, 221, 0.7)",
-          "rgba(2, 139, 71, 0.7)",
-          "rgba(0, 0, 0, 0.7)",
-        ],
-        borderColor: [
-          "rgba(0, 0, 255, 0.3)",
-          "rgba(255, 0, 221, 0.3)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-        ],
+        label: "Units sold",
+        data: top.map(([, qty]) => qty),
+        backgroundColor: COLORS,
+        borderColor: COLORS,
         borderWidth: 1,
       },
     ],
@@ -34,7 +40,13 @@ export default function BestSellingProductsChart() {
       </h2>
       {/* Chart */}
       <div className="p-4">
-        <Pie data={data} />
+        {top.length > 0 ? (
+          <Pie data={data} />
+        ) : (
+          <p className="text-slate-500 dark:text-slate-300">
+            No sales yet. Top products will appear here after the first sale.
+          </p>
+        )}
       </div>
     </div>
   );

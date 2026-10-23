@@ -43,7 +43,7 @@ export default function ImageInput({
         <UploadDropzone
           endpoint={endpoint}
           onClientUploadComplete={(res) => {
-            setImageUrl(res[0].url);
+            setImageUrl(res[0]?.ufsUrl ?? res[0]?.url ?? "");
             // Do something with the response
             toast.success("Image Upload complete");
             console.log("Files: ", res);

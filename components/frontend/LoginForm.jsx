@@ -9,7 +9,6 @@ import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { getData } from "@/lib/getData";
 export default function LoginForm() {
   const router = useRouter();
   const {

@@ -7,15 +7,17 @@ export default async function UpdateProduct({ params: { id } }) {
   const product = await getData(`products/${id}`);
   //Categories and Farmers
   const categoriesData = await getData("categories");
-  const usersData = await getData("users");
-  const farmersData = usersData.filter((user) => user.role === "FARMER");
+  const usersDataRaw = await getData("users");
+  const usersData = Array.isArray(usersDataRaw) ? usersDataRaw : [];
+  const categories = Array.isArray(categoriesData) ? categoriesData : [];
+  const farmersData = usersData.filter((user) => user.role && user.role !== "USER");
   const farmers = farmersData.map((farmer) => {
     return {
       id: farmer.id,
       title: farmer.name,
     };
   });
-  const categories = categoriesData.map((category) => {
+  const categoryOptions = categories.map((category) => {
     return {
       id: category.id,
       title: category.title,
@@ -26,7 +28,7 @@ export default async function UpdateProduct({ params: { id } }) {
       <FormHeader title="Update Product" />
       <NewProductForm
         updateData={product}
-        categories={categories}
+        categories={categoryOptions}
         farmers={farmers}
       />
     </div>

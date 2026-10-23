@@ -11,59 +11,42 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
-export default function WeeklySalesChart() {
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export default function WeeklySalesChart({ sales = [] }) {
   const options = {
     responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: false,
-        text: "Chart.js Line Chart",
-      },
-    },
+    scales: { y: { beginAtZero: true } },
+    plugins: { legend: { position: "top" } },
   };
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "Sales",
-        data: labels.map(() =>
-          faker.datatype.number({ min: -1000, max: 1000 })
-        ),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      // {
-      //   label: "Dataset 2",
-      //   data: labels.map(() =>
-      //     faker.datatype.number({ min: -1000, max: 1000 })
-      //   ),
-      //   borderColor: "rgb(53, 162, 235)",
-      //   backgroundColor: "rgba(53, 162, 235, 0.5)",
-      // },
-    ],
-  };
+  // Last 7 days, oldest first
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - (6 - i));
+    return d;
+  });
+  const labels = days.map((d) =>
+    d.toLocaleDateString("en-US", { weekday: "short", day: "numeric" })
+  );
+  const salesOn = (d) =>
+    sales.filter(
+      (sale) => new Date(sale.createdAt).toDateString() === d.toDateString()
+    );
+  const revenueByDay = days.map((d) =>
+    salesOn(d).reduce((acc, sale) => acc + (sale.total ?? 0), 0)
+  );
+  const ordersByDay = days.map(
+    (d) => new Set(salesOn(d).map((sale) => sale.orderId)).size
+  );
   const tabs = [
     {
       title: "Sales",
@@ -72,10 +55,8 @@ export default function WeeklySalesChart() {
         labels,
         datasets: [
           {
-            label: "Sales",
-            data: labels.map(() =>
-              faker.datatype.number({ min: -1000, max: 1000 })
-            ),
+            label: "Sales (Ksh)",
+            data: revenueByDay,
             borderColor: "rgb(255, 99, 132)",
             backgroundColor: "rgba(255, 99, 132, 0.5)",
           },
@@ -90,9 +71,7 @@ export default function WeeklySalesChart() {
         datasets: [
           {
             label: "Orders",
-            data: labels.map(() =>
-              faker.datatype.number({ min: -1000, max: 1000 })
-            ),
+            data: ordersByDay,
             borderColor: "rgb(0, 137, 132)",
             backgroundColor: "rgba(0, 137, 132, 0.5)",
           },
@@ -133,7 +112,7 @@ export default function WeeklySalesChart() {
         {/* Content to display */}
         {tabs.map((tab, i) => {
           if (chartTodDisplay === tab.type) {
-            return <Line options={options} data={tab.data} />;
+            return <Line key={tab.type} options={options} data={tab.data} />;
           }
           return null;
         })}

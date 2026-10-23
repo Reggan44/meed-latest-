@@ -2,23 +2,38 @@ import CategoryList from "@/components/frontend/CategoryList";
 import CommunityTrainings from "@/components/frontend/CommunityTrainings";
 import Hero from "@/components/frontend/Hero";
 import MarketList from "@/components/frontend/MarketList";
-import { getData } from "@/lib/getData";
+import Product from "@/components/frontend/Product";
+import { getCategoriesWithProducts, getLatestProducts } from "@/lib/storefront";
 import Image from "next/image";
 import Link from "next/link";
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
 export default async function Home() {
-  const categoriesData = await getData("categories");
-  const categories = categoriesData.filter((category) => {
-    return category.products.length > 3;
-  });
-  const trainings = await getData("trainings");
-  const session = await getServerSession(authOptions);
-  console.log(session?.user);
+  const [categoriesData, latest] = await Promise.all([
+    getCategoriesWithProducts(),
+    getLatestProducts(20),
+  ]);
+  const categories = categoriesData.filter((category) => (category.products?.length ?? 0) > 0);
   return (
     <div className="min-h-screen">
       <Hero />
       <MarketList />
+      {latest.length > 0 && (
+        <section className="py-8">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-xl font-semibold">New Arrivals</h2>
+            <Link
+              href="/search"
+              className="rounded-md bg-lime-600 px-4 py-2 text-sm text-white hover:bg-lime-700"
+            >
+              Browse all products
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {latest.map((product) => (
+              <Product key={product.id} product={product} inGrid />
+            ))}
+          </div>
+        </section>
+      )}
 
       {categories.map((category, i) => {
         return (

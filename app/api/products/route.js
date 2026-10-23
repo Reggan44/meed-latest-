@@ -24,6 +24,18 @@ export async function POST(request) {
       qty,
       productImages,
     } = await request.json();
+    if (!farmerId || !categoryId) {
+      return NextResponse.json(
+        { data: null, message: "Category and shop owner are required" },
+        { status: 400 }
+      );
+    }
+    if (!Array.isArray(productImages) || productImages.length === 0) {
+      return NextResponse.json(
+        { data: null, message: "At least one product image is required" },
+        { status: 400 }
+      );
+    }
     //Check if this product already exists in the db
     const existingProduct = await db.product.findUnique({
       where: {
@@ -89,7 +101,7 @@ export async function GET(request) {
   const min = request.nextUrl.searchParams.get("min");
   const max = request.nextUrl.searchParams.get("max");
   const page = request.nextUrl.searchParams.get("page") || 1;
-  const pageSize = 3;
+  const pageSize = 24;
   console.log(sortBy, categoryId);
   let where = {
     categoryId,
