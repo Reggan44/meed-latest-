@@ -5,16 +5,16 @@ import React from "react";
 
 export default async function UpdateProduct({ params: { id } }) {
   const product = await getData(`products/${id}`);
-  //Categories and Farmers
+  //Categories and Sellers
   const categoriesData = await getData("categories");
   const usersDataRaw = await getData("users");
   const usersData = Array.isArray(usersDataRaw) ? usersDataRaw : [];
   const categories = Array.isArray(categoriesData) ? categoriesData : [];
-  const farmersData = usersData.filter((user) => user.role && user.role !== "USER");
-  const farmers = farmersData.map((farmer) => {
+  const sellersData = usersData.filter((user) => user.role && user.role !== "USER");
+  const sellers = sellersData.map((seller) => {
     return {
-      id: farmer.id,
-      title: farmer.name,
+      id: seller.id,
+      title: seller.name,
     };
   });
   const categoryOptions = categories.map((category) => {
@@ -29,7 +29,7 @@ export default async function UpdateProduct({ params: { id } }) {
       <NewProductForm
         updateData={product}
         categories={categoryOptions}
-        farmers={farmers}
+        sellers={sellers}
       />
     </div>
   );

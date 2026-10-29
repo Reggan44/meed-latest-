@@ -7,7 +7,7 @@ export async function POST(request) {
       barcode,
       categoryId,
       description,
-      farmerId,
+      vendorId,
       isActive,
       isWholesale,
       productCode,
@@ -24,7 +24,7 @@ export async function POST(request) {
       qty,
       productImages,
     } = await request.json();
-    if (!farmerId || !categoryId) {
+    if (!vendorId || !categoryId) {
       return NextResponse.json(
         { data: null, message: "Category and shop owner are required" },
         { status: 400 }
@@ -56,7 +56,7 @@ export async function POST(request) {
         barcode,
         categoryId,
         description,
-        userId: farmerId,
+        userId: vendorId,
         productImages,
         imageUrl: productImages[0],
         isActive,
@@ -77,7 +77,7 @@ export async function POST(request) {
         //   connect: { id: categoryId },
         // },
         // user: {
-        //   connect: { id: farmerId },
+        //   connect: { id: vendorId },
         // },
       },
     });

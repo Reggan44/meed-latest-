@@ -7,7 +7,6 @@ export default function Status({ row, accessorKey }) {
   const userId = row.original.id;
   const [status, setStatus] = useState(savedStatus);
   const [loading, setLoading] = useState(false);
-  console.log(status, row.original, userId);
   async function handleChange(e) {
     const newStatus = e.target.value === "true"; // Convert string to boolean
     setStatus(newStatus);
@@ -20,7 +19,7 @@ export default function Status({ row, accessorKey }) {
     try {
       setLoading(true);
       const baseUrl = "";
-      const response = await fetch(`${baseUrl}/api/farmers/${userId}`, {
+      const response = await fetch(`${baseUrl}/api/vendors/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +29,7 @@ export default function Status({ row, accessorKey }) {
       if (response.ok) {
         // console.log(response);
         setLoading(false);
-        toast.success(`Farmer Status Updated Successfully`);
+        toast.success(`Seller Status Updated Successfully`);
       } else {
         setLoading(false);
         toast.error("Something Went wrong");

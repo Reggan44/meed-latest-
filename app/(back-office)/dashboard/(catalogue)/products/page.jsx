@@ -18,7 +18,7 @@ export default async function page() {
   const role = session?.user?.role;
   const allProducts = await getData("products");
   const id = session?.user?.id;
-  const farmerProducts = allProducts.filter((product) => product.userId === id);
+  const sellerProducts = allProducts.filter((product) => product.userId === id);
 
   console.log(id);
   return (
@@ -33,7 +33,7 @@ export default async function page() {
         {role === "ADMIN" ? (
           <DataTable data={allProducts} columns={columns} />
         ) : (
-          <DataTable data={farmerProducts} columns={columns} />
+          <DataTable data={sellerProducts} columns={columns} />
         )}
       </div>
     </div>

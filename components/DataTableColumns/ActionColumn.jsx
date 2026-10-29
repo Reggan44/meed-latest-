@@ -11,7 +11,7 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import DeleteBtn from "../Actions/DeleteBtn";
 import EditBtn from "../Actions/EditBtn";
-export default function ActionColumn({ row, title, endpoint, editEndpoint }) {
+export default function ActionColumn({ row, title, endpoint, editEndpoint, showEdit = true }) {
   const isActive = row.isActive;
   return (
     <DropdownMenu>
@@ -27,9 +27,11 @@ export default function ActionColumn({ row, title, endpoint, editEndpoint }) {
         <DropdownMenuItem>
           <DeleteBtn title={title} endpoint={endpoint} />
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <EditBtn title={title} editEndpoint={editEndpoint} />
-        </DropdownMenuItem>
+        {showEdit && (
+          <DropdownMenuItem>
+            <EditBtn title={title} editEndpoint={editEndpoint} />
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

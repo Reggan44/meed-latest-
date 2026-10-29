@@ -20,7 +20,7 @@ export default async function Sales() {
   // Filter by vendorId => to get sales for this vendor
   //Fetch Order by Id
   // Customer Name, email,Phone,OrderNumber
-  const farmerSales = allSales.filter((sale) => sale.vendorId === id);
+  const sellerSales = allSales.filter((sale) => sale.vendorId === id);
   return (
     <div>
       {/* Header */}
@@ -33,7 +33,7 @@ export default async function Sales() {
         {role === "ADMIN" ? (
           <DataTable data={allSales} columns={columns} />
         ) : (
-          <DataTable data={farmerSales} columns={columns} />
+          <DataTable data={sellerSales} columns={columns} />
         )}
       </div>
     </div>

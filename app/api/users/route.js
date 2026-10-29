@@ -3,10 +3,8 @@ import bcrypt from "bcrypt";
 import db from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import base64url from "base64url";
-import { Resend } from "resend";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 import { getSessionUser, isAdmin, requireAdmin, safeUser } from "@/lib/authz";
-// import { EmailTemplate } from "@/components/email-template";
 export async function POST(request) {
   try {
     //extract the credentials
@@ -16,7 +14,7 @@ export async function POST(request) {
         { status: 429 }
       );
     }
-    const { name, email, password, role: requestedRole, plan } =
+    const { name, email, password, role: requestedRole, storeName, phone, physicalAddress } =
       await request.json();
     if (
       typeof email !== "string" ||
@@ -30,7 +28,7 @@ export async function POST(request) {
       );
     }
     // Public sign-up may only create shoppers or sellers; staff roles need an admin.
-    const PUBLIC_ROLES = ["USER", "FARMER", "VENDOR"];
+    const PUBLIC_ROLES = ["USER", "VENDOR"];
     const caller = await getSessionUser();
     const role = PUBLIC_ROLES.includes(requestedRole)
       ? requestedRole
@@ -65,34 +63,18 @@ export async function POST(request) {
         email,
         password: hashedPassword,
         role,
-        plan,
         verificationToken: token,
+        ...(role === "VENDOR" && {
+          sellerProfile: {
+            create: {
+              storeName: String(storeName || name || "").slice(0, 120),
+              phone: String(phone || "").slice(0, 30),
+              physicalAddress: String(physicalAddress || "").slice(0, 200),
+            },
+          },
+        }),
       },
     });
-    // SEND THE EMAIL IF USER ROLE == FARMER
-    // if (role === "FARMER") {
-    //   //Send an Email with the Token on the link as a search param
-    //   const userId = newUser.id;
-    //   const linkText = "Verify Account";
-    //   const redirectUrl = `onboarding/${userId}?token=${token}`;
-    //   const description =
-    //     "Thank you, for Creating an Account with Us. We request you to click  on the link Below in order to Complete your onboarding Process. Thankyou";
-    //   const subject = "Account Verification - Limi Ecommerce";
-    //   const sendMail = await resend.emails.send({
-    //     from: "Desishub <info@jazzafricaadventures.com>",
-    //     to: email,
-    //     subject: subject,
-    //     react: EmailTemplate({
-    //       name,
-    //       redirectUrl,
-    //       linkText,
-    //       description,
-    //       subject,
-    //     }),
-    //   });
-    //   console.log(sendMail);
-    //   //Upon Click redirect them to the login
-    // }
     return NextResponse.json(
       {
         data: safeUser(newUser),

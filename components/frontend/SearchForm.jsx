@@ -48,7 +48,7 @@ export default function SearchForm() {
           type="text"
           id="voice-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-lime-500 focus:border-lime-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-lime-500 dark:focus:border-lime-500"
-          placeholder="Search Products, Categories, Markets..."
+          placeholder="Search products and categories..."
         />
       </div>
       <button

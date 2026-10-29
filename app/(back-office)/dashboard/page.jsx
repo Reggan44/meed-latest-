@@ -1,6 +1,6 @@
 import CustomDataTable from "@/components/backoffice/CustomDataTable";
 import DashboardCharts from "@/components/backoffice/DashboardCharts";
-import FarmerDashboard from "@/components/backoffice/FarmerDashboard";
+import SellerDashboard from "@/components/backoffice/SellerDashboard";
 import Heading from "@/components/backoffice/Heading";
 import LargeCards from "@/components/backoffice/LargeCards";
 import SmallCards from "@/components/backoffice/SmallCards";
@@ -20,8 +20,8 @@ export default async function page() {
   if (role === "USER") {
     return <UserDashboard />;
   }
-  if (role === "FARMER") {
-    return <FarmerDashboard />;
+  if (role === "VENDOR") {
+    return <SellerDashboard />;
   }
   return (
     <div>

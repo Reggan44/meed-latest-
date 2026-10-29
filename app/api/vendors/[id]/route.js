@@ -10,7 +10,7 @@ export async function GET(request, { params: { id } }) {
         id,
       },
       include: {
-        vendorProfile: true,
+        sellerProfile: true,
       },
     });
     return NextResponse.json(safeUser(vendor));

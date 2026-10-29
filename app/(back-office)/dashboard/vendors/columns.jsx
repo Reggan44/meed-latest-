@@ -47,8 +47,14 @@ export const columns = [
     header: "Role",
   },
   {
-    accessorKey: "plan",
-    header: "Plan",
+    accessorKey: "sellerProfile.storeName",
+    header: "Store",
+    cell: ({ row }) => row.original.sellerProfile?.storeName ?? "-",
+  },
+  {
+    accessorKey: "sellerProfile.phone",
+    header: "Phone",
+    cell: ({ row }) => row.original.sellerProfile?.phone ?? "-",
   },
   {
     accessorKey: "status",
@@ -71,8 +77,8 @@ export const columns = [
       return (
         <ActionColumn
           row={row}
-          title="Vendorr"
-          editEndpoint={`vendors/update/${vendor.id}`}
+          title="Seller"
+          showEdit={false}
           endpoint={`vendors/${vendor.id}`}
         />
       );

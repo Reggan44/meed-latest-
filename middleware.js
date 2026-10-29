@@ -2,16 +2,13 @@ import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 // Resources any signed-in user may create/update (onboarding, profile).
-const AUTHENTICATED_RESOURCES = ["farmers", "vendors", "customers"];
+const AUTHENTICATED_RESOURCES = ["vendors", "customers"];
 // Resources restricted to back-office roles for writes.
 const STAFF_RESOURCES = [
   "products",
   "categories",
   "banners",
   "coupons",
-  "markets",
-  "stores",
-  "trainings",
   "staffs",
   "sales",
 ];
@@ -19,15 +16,14 @@ const STAFF_RESOURCES = [
 const PRIVATE_LISTS = [
   "users",
   "customers",
-  "farmers",
   "vendors",
   "staffs",
   "sales",
   "orders",
 ];
 // Catalogue resources only admins/moderators may change (they are shared by all sellers).
-const ADMIN_ONLY_WRITES = ["categories", "banners", "markets", "stores", "trainings", "staffs"];
-const STAFF_ROLES = ["ADMIN", "MODERATOR", "FARMER", "VENDOR"];
+const ADMIN_ONLY_WRITES = ["categories", "banners", "staffs"];
+const STAFF_ROLES = ["ADMIN", "MODERATOR", "VENDOR"];
 
 export async function middleware(req) {
   const { pathname } = req.nextUrl;

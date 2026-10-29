@@ -4,7 +4,7 @@ import { getData } from "@/lib/getData";
 import React from "react";
 
 export default async function NewProduct() {
-  //Categories and Farmers
+  //Categories and Sellers
   const categoriesData = await getData("categories");
   const usersDataRaw = await getData("users");
   const usersData = Array.isArray(usersDataRaw) ? usersDataRaw : [];
@@ -13,14 +13,14 @@ export default async function NewProduct() {
   if (!categoriesData) {
     return <div>Loading...</div>;
   }
-  const farmersData = usersData.filter((user) => user.role && user.role !== "USER");
-  const farmers = farmersData.map((farmer) => {
+  const sellersData = usersData.filter((user) => user.role && user.role !== "USER");
+  const sellers = sellersData.map((seller) => {
     return {
-      id: farmer.id,
-      title: farmer.name,
+      id: seller.id,
+      title: seller.name,
     };
   });
-  // console.log(farmers);
+  // console.log(sellers);
   const categoryOptions = categories.map((category) => {
     return {
       id: category.id,
@@ -30,7 +30,7 @@ export default async function NewProduct() {
   return (
     <div>
       <FormHeader title="New Product" />
-      <NewProductForm categories={categoryOptions} farmers={farmers} />
+      <NewProductForm categories={categoryOptions} sellers={sellers} />
     </div>
   );
 }

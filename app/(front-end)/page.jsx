@@ -1,7 +1,5 @@
 import CategoryList from "@/components/frontend/CategoryList";
-import CommunityTrainings from "@/components/frontend/CommunityTrainings";
 import Hero from "@/components/frontend/Hero";
-import MarketList from "@/components/frontend/MarketList";
 import Product from "@/components/frontend/Product";
 import { getCategoriesWithProducts, getLatestProducts } from "@/lib/storefront";
 import Image from "next/image";
@@ -15,7 +13,6 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       <Hero />
-      <MarketList />
       {latest.length > 0 && (
         <section className="py-8">
           <div className="mb-4 flex items-center justify-between">
@@ -38,7 +35,7 @@ export default async function Home() {
       {categories.map((category, i) => {
         return (
           <div className="py-8" key={i}>
-            <CategoryList isMarketPage={false} category={category} />
+            <CategoryList category={category} />
           </div>
         );
       })}

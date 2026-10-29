@@ -20,7 +20,7 @@ import MultipleImageInput from "../FormInputs/MultipleImageInput";
 
 export default function NewProductForm({
   categories,
-  farmers,
+  sellers,
   updateData = {},
 }) {
   console.log(updateData);
@@ -47,9 +47,9 @@ export default function NewProductForm({
       isActive: true,
       isWholesale: false,
       categoryId: categories?.[0]?.id ?? "",
-      farmerId: farmers?.[0]?.id ?? "",
+      vendorId: sellers?.[0]?.id ?? "",
       ...updateData,
-      ...(updateData?.userId ? { farmerId: updateData.userId } : {}),
+      ...(updateData?.userId ? { vendorId: updateData.userId } : {}),
     },
   });
   const isActive = watch("isActive");
@@ -62,7 +62,7 @@ export default function NewProductForm({
   const [productImages, setProductImages] = useState(initialProductImages);
   console.log(productImages);
   async function onSubmit(data) {
-    if (!data.farmerId || !data.categoryId) {
+    if (!data.vendorId || !data.categoryId) {
       toast.error("Please select a category and a shop owner");
       return;
     }
@@ -172,11 +172,11 @@ export default function NewProductForm({
         />
         <SelectInput
           label="Select Shop Owner"
-          name="farmerId"
+          name="vendorId"
           register={register}
           errors={errors}
           className="w-full"
-          options={farmers}
+          options={sellers}
         />
         <ToggleInput
           label="Supports Wholesale Selling"

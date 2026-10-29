@@ -1,5 +1,4 @@
 import Heading from "@/components/backoffice/Heading";
-import PageHeader from "@/components/backoffice/PageHeader";
 import TableActions from "@/components/backoffice/TableActions";
 
 import Link from "next/link";
@@ -13,11 +12,7 @@ export default async function page() {
   return (
     <div>
       {/* Header */}
-      <PageHeader
-        heading="Vendors"
-        href="/dashboard/vendors/new"
-        linkTitle="Add vendor"
-      />
+      <h2 className="mb-4 text-xl font-semibold">Sellers</h2>
       <div className="py-0">
         <DataTable data={vendors} columns={columns} filterKeys={["name"]} />
       </div>

@@ -51,12 +51,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       href: "/dashboard/customers",
     },
     {
-      title: "Stores",
-      icon: Warehouse,
-      href: "/dashboard/markets",
-    },
-    {
-      title: "Vendors",
+      title: "Sellers",
       icon: UserSquare2,
       href: "/dashboard/vendors",
     },
@@ -76,17 +71,12 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       href: "/dashboard/staff",
     },
     {
-      title: "Meed Community",
-      icon: Building2,
-      href: "/dashboard/community",
-    },
-    {
       title: "Wallet",
       icon: CircleDollarSign,
       href: "/dashboard/wallet",
     },
     {
-      title: "Vendor Support",
+      title: "Seller Support",
       icon: HeartHandshake,
       href: "/dashboard/vendor-support",
     },
@@ -136,7 +126,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
         href: "/dashboard/wallet",
       },
       {
-        title: "Vendor Support",
+        title: "Seller Support",
         icon: HeartHandshake,
         href: "/dashboard/vendor-support",
       },

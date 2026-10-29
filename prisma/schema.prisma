@@ -38,7 +38,6 @@ model Banner {
 
 // 1 to 1 Relationship User => Profile Relation
 // 1 to Many => Category => Product Relation
-// many to many => Market => Category
 
 model Category {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -48,25 +47,6 @@ model Category {
   description String?
   isActive    Boolean
   products    Product[]
-  trainings   Training[]
-
-  marketIds String[] @db.ObjectId
-  markets   Market[] @relation(fields: [marketIds], references: [id])
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
-model Market {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  slug        String  @unique
-  logoUrl     String?
-  description String?
-  isActive    Boolean
-
-  categoryIds String[]   @db.ObjectId
-  categories  Category[] @relation(fields: [categoryIds], references: [id])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -104,25 +84,9 @@ model Product {
   updatedAt  DateTime?   @updatedAt
 }
 
-model Training {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  slug        String  @unique
-  imageUrl    String?
-  description String?
-  content     String?
-  isActive    Boolean
-
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String    @db.ObjectId
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
-}
-
 enum UserRole {
   ADMIN
   USER
-  FARMER
   VENDOR
   MODERATOR
 }
@@ -150,12 +114,11 @@ model User {
   products          Product[]
   coupons          Coupon[]
   role              UserRole       @default(USER)
-  plan             String?        
   verificationToken String?
   resetTokenHash    String?
   resetTokenExpires DateTime?
   status            Boolean        @default(false)
-  farmerProfile     FarmerProfile?
+  sellerProfile     SellerProfile?
   profile           UserProfile? // Link to user profile
   orders            Order[] //User can have multiple Orders
   createdAt         DateTime       @default(now())
@@ -185,22 +148,12 @@ model UserProfile {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model FarmerProfile {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  code               String?
-  contactPerson      String?
-  contactPersonPhone String?
-  profileImageUrl    String?
-  firstName          String?
-  lastName           String?
-  notes              String?
-  phone              String?
-  physicalAddress    String?
-  terms              String?
-  isActive           Boolean?
-  products           String[]
-  landSize           Float?
-  mainCrop           String?
+model SellerProfile {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  storeName       String?
+  phone           String?
+  physicalAddress String?
+  notes           String?
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique @db.ObjectId

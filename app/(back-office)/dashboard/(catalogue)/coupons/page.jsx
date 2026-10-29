@@ -15,7 +15,7 @@ export default async function Coupons() {
   const id = session?.user?.id;
   const role = session?.user?.role;
   const allCoupons = await getData("coupons");
-  const farmerCoupons = allCoupons.filter((coupon) => coupon.vendorId === id);
+  const sellerCoupons = allCoupons.filter((coupon) => coupon.vendorId === id);
   return (
     <div>
       {/* Header */}
@@ -28,7 +28,7 @@ export default async function Coupons() {
         {role === "ADMIN" ? (
           <DataTable data={allCoupons} columns={columns} />
         ) : (
-          <DataTable data={farmerCoupons} columns={columns} />
+          <DataTable data={sellerCoupons} columns={columns} />
         )}
       </div>
     </div>

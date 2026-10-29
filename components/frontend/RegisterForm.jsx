@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -10,8 +10,6 @@ import TextInput from "../FormInputs/TextInput";
 
 export default function RegisterForm({ role = "USER" }) {
   const router = useRouter(); // Redirecting on the client side
-  const searchParams = useSearchParams();
-  const plan = searchParams.get("plan");
   const {
     register,
     handleSubmit,
@@ -21,7 +19,6 @@ export default function RegisterForm({ role = "USER" }) {
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState("");
   async function onSubmit(data) {
-    data.plan = plan;
     try {
       console.log(data);
       setLoading(true);
@@ -36,16 +33,12 @@ export default function RegisterForm({ role = "USER" }) {
       if (response.ok) {
         console.log(responseData);
         setLoading(false);
-        toast.success("User Created Successfully");
+        toast.success(role === "USER" ? "Account created" : "Application received");
         reset();
-        //if role =user => home
-        //if role= farmer => onboarding
-        // const userRole =responseData.data.role
         if (role === "USER") {
           router.push("/");
         } else {
-          const { data } = responseData;
-          router.push(`/verify-email?userId=${data.id}`);
+          router.push("/sell/submitted");
         }
       } else {
         setLoading(false);
@@ -84,6 +77,32 @@ export default function RegisterForm({ role = "USER" }) {
         type="text"
         className="sm:col-span-2 mb-3"
       />
+      {role === "VENDOR" && (
+        <>
+          <TextInput
+            label="Store Name"
+            name="storeName"
+            register={register}
+            errors={errors}
+            className="sm:col-span-2 mb-3"
+          />
+          <TextInput
+            label="Phone Number"
+            name="phone"
+            register={register}
+            errors={errors}
+            type="tel"
+            className="sm:col-span-2 mb-3"
+          />
+          <TextInput
+            label="Business Location"
+            name="physicalAddress"
+            register={register}
+            errors={errors}
+            className="sm:col-span-2 mb-3"
+          />
+        </>
+      )}
       <TextInput
         label="Email Address"
         name="email"
@@ -106,7 +125,7 @@ export default function RegisterForm({ role = "USER" }) {
 
       <SubmitButton
         isLoading={loading}
-        buttonTitle="Register"
+        buttonTitle={role === "USER" ? "Register" : "Apply to sell"}
         loadingButtonTitle="Creating Please wait..."
       />
 
@@ -124,7 +143,7 @@ export default function RegisterForm({ role = "USER" }) {
           <p className="text-[0.75rem] font-light text-gray-500 dark:text-gray-400 py-4">
             Want to sell on Meed ?{" "}
             <Link
-              href="/farmer-pricing"
+              href="/sell"
               className="font-medium text-purple-600 hover:underline dark:text-purple-500"
             >
               Register here

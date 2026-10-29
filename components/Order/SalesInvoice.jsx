@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useRef } from "react";
-import logo from "../../public/limiLogo.webp";
+import logo from "../../public/Logo.png";
 import { convertIsoDateToNormal } from "@/lib/convertIsoDatetoNormal";
 import { useReactToPrint } from "react-to-print";
 export default function SalesInvoice({ order }) {

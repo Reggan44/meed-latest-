@@ -61,7 +61,7 @@ export async function PUT(request, { params: { id } }) {
       barcode,
       categoryId,
       description,
-      farmerId,
+      vendorId,
       imageUrl,
       isActive,
       isWholesale,
@@ -98,7 +98,7 @@ export async function PUT(request, { params: { id } }) {
         barcode,
         categoryId,
         description,
-        userId: farmerId,
+        userId: vendorId,
         imageUrl,
         isActive,
         isWholesale,
@@ -118,7 +118,7 @@ export async function PUT(request, { params: { id } }) {
         //   connect: { id: categoryId },
         // },
         // user: {
-        //   connect: { id: farmerId },
+        //   connect: { id: vendorId },
         // },
       },
     });

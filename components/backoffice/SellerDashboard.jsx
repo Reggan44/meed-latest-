@@ -1,21 +1,20 @@
 import React from "react";
-import OverviewCards from "./Farmer/OverviewCards";
+import OverviewCards from "./Seller/OverviewCards";
 import { authOptions } from "@/lib/authOptions";
 import { getData } from "@/lib/getData";
 import { getServerSession } from "next-auth";
 import { Info } from "lucide-react";
 
-export default async function FarmerDashboard() {
+export default async function SellerDashboard() {
   // Sales,
   //products
   const session = await getServerSession(authOptions);
   const user = session?.user;
-  // console.log(session?.user);
   const { name, email, id, role, emailVerified, status = false } = user;
   const sales = await getData("sales");
   const salesById = sales.filter((sale) => sale.vendorId === id);
   const products = await getData("products");
-  const productsById = products.filter((product) => product.productId === id);
+  const productsById = products.filter((product) => product.userId === id);
   if (!status) {
     return (
       <div className="max-w-2xl mx-auto min-h-screen mt-8">
@@ -30,8 +29,8 @@ export default async function FarmerDashboard() {
             <h3 className="text-lg font-medium">Account Under Review</h3>
           </div>
           <div className="mt-2 mb-4 text-sm">
-            Your account details are currently under review. Please note that it
-            may take 24-48 hours for approval. Thank you for your patience.
+            Your seller application is being reviewed by Meed. You will be able to list
+            products as soon as it is approved. Thank you for your patience.
           </div>
         </div>
       </div>

@@ -28,28 +28,7 @@ export const ourFileRouter = {
       console.log("file url", file.url, metadata);
       return { uploadedBy: "JB" };
     }),
-  marketLogoUploader: f({ image: { maxFileSize: "1MB" } })
-    .middleware(requireSession)
-    // Set permissions and file types for this FileRoute
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log("file url", file.url, metadata);
-      return { uploadedBy: "JB" };
-    }),
   productImageUploader: f({ image: { maxFileSize: "1MB" } })
-    .middleware(requireSession)
-    // Set permissions and file types for this FileRoute
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log("file url", file.url, metadata);
-      return { uploadedBy: "JB" };
-    }),
-  trainingImageUploader: f({ image: { maxFileSize: "1MB" } })
-    .middleware(requireSession)
-    // Set permissions and file types for this FileRoute
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log("file url", file.url, metadata);
-      return { uploadedBy: "JB" };
-    }),
-  farmerProfileUploader: f({ image: { maxFileSize: "1MB" } })
     .middleware(requireSession)
     // Set permissions and file types for this FileRoute
     .onUploadComplete(async ({ metadata, file }) => {
@@ -59,18 +38,6 @@ export const ourFileRouter = {
   customerProfileUploader: f({ image: { maxFileSize: "1MB" } })
     .middleware(requireSession)
     // Set permissions and file types for this FileRoute
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log("file url", file.url, metadata);
-      return { uploadedBy: "JB" };
-    }),
-  storeLogoUploader: f({ image: { maxFileSize: "1MB" } })
-    .middleware(requireSession)
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log("file url", file.url, metadata);
-      return { uploadedBy: "JB" };
-    }),
-  vendorProfileUploader: f({ image: { maxFileSize: "1MB" } })
-    .middleware(requireSession)
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("file url", file.url, metadata);
       return { uploadedBy: "JB" };

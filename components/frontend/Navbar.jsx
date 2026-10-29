@@ -3,10 +3,9 @@ import React from "react";
 import SearchForm from "./SearchForm";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../public/limiLogo.webp";
+import logo from "../../public/Logo.png";
 import { HelpCircle, ShoppingCart, User } from "lucide-react";
 import ThemeSwitcherBtn from "../ThemeSwitcherBtn";
-import HelpModal from "./HelpModal";
 import CartCount from "./CartCount";
 import { useSession } from "next-auth/react";
 import UserAvatar from "../backoffice/UserAvatar";
@@ -35,7 +34,7 @@ export default function Navbar() {
           ) : (
             <UserAvatar user={session?.user} />
           )}
-          <HelpModal />
+          <Link href="/support" className="flex items-center space-x-1 text-green-950 dark:text-slate-100"><HelpCircle /><span className="hidden sm:inline">Help</span></Link>
           <CartCount />
           <ThemeSwitcherBtn />
         </div>
