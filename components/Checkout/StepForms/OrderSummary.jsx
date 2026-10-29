@@ -1,4 +1,5 @@
 "use client";
+import { deliveryDays } from "@/lib/shipping";
 import { setCurrentStep } from "@/redux/slices/checkoutSlice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -37,27 +38,36 @@ export default function OrderSummary() {
     // console.log(data.orderItems);
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-      const response = await fetch(`${baseUrl}/api/orders`, {
+      const response = await fetch(`/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      const responseData = await response.json();
-      if (response.ok) {
+      const responseData = await response.json().catch(() => ({}));
+      if (!response.ok) {
         setLoading(false);
-        toast.success("Order Created Successfully");
-        router.push(`/order-confirmation/${responseData.id}`);
+        toast.error(responseData.message || "Something went wrong, please try again");
+        return;
+      }
+      const payRes = await fetch(`/api/payments/intasend/checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: responseData.id }),
+      });
+      const payData = await payRes.json().catch(() => ({}));
+      if (payRes.ok && payData.url) {
+        window.location.href = payData.url;
       } else {
         setLoading(false);
-        toast.error("Something Went wrong, Please Try Again");
+        toast.error(payData.message || "Could not start payment");
+        // The order exists; the confirmation page lets the customer retry payment.
+        router.push(`/order-confirmation/${responseData.id}`);
       }
     } catch (error) {
       setLoading(false);
-      // console.log(error);
+      toast.error("Network error, please check your connection and try again");
     }
   }
   return (
@@ -85,9 +95,9 @@ export default function OrderSummary() {
             </div>
             <div className="flex items-center gap-2">
               <div className="flex flex-col justify-center">
-                <h4>${(cartItem.salePrice * cartItem.qty).toFixed(2)}</h4>
+                <h4>KSh {(cartItem.salePrice * cartItem.qty).toFixed(2)}</h4>
                 <p className="text-[10px] text-gray-300">
-                  (${cartItem.salePrice}x {cartItem.qty})
+                  (KSh {cartItem.salePrice}x {cartItem.qty})
                 </p>
               </div>
             </div>
@@ -99,21 +109,16 @@ export default function OrderSummary() {
           <span>Shipping Cost </span>
           <span className="text-[12px] text-gray-300">
             The Order will be delivered in{" "}
-            {checkoutFormData.shippingCost == "50"
-              ? "3"
-              : checkoutFormData.shippingCost == "75"
-              ? "2"
-              : "1"}{" "}
-            days{" "}
+            {deliveryDays(checkoutFormData.shippingCost)} days{" "}
           </span>
-          <span>${checkoutFormData.shippingCost}</span>
+          <span>KSh {checkoutFormData.shippingCost}</span>
         </div>
       )}
       <div className="flex items-center justify-between border-b border-slate-400  pb-3 font-semibold text-sm mb-4">
         <span>Total</span>
 
         <span>
-          $
+          KSh{" "}
           {(
             parseFloat(checkoutFormData.shippingCost) + parseFloat(subTotal)
           ).toFixed(2)}

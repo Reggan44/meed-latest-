@@ -17,7 +17,7 @@ export default function CartSubTotalCard({ subTotal }) {
       </p>
       <div className="flex items-center justify-between py-4 font-bold">
         <span>Total </span>
-        <span>${totalPrice}</span>
+        <span>KSh {totalPrice}</span>
       </div>
       <div className="mt-8">
         <Link

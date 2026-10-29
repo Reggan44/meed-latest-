@@ -100,7 +100,7 @@ export default function ShippingDetailsForm() {
                 type="radio"
                 id="hosting-small"
                 name="hosting"
-                value="50"
+                value="200"
                 className="hidden peer"
                 required
                 onChange={(e) => setShippingCost(e.target.value)}
@@ -113,7 +113,7 @@ export default function ShippingDetailsForm() {
                 <div className="flex gap-2 items-center">
                   <Truck className="w-8 h-8 ms-3 flex-shrink-0 " />
                   <div className="">
-                    <p>Delivery in 3 Days for $50</p>
+                    <p>Delivery in 3 Days for KSh 200</p>
                   </div>
                 </div>
                 <Circle className="w-5 h-5 ms-3 flex-shrink-0" />
@@ -124,7 +124,7 @@ export default function ShippingDetailsForm() {
                 type="radio"
                 id="hosting-medium"
                 name="hosting"
-                value="75"
+                value="350"
                 class="hidden peer"
                 onChange={(e) => setShippingCost(e.target.value)}
               />
@@ -135,7 +135,7 @@ export default function ShippingDetailsForm() {
                 <div className="flex gap-2 items-center">
                   <Truck className="w-8 h-8 ms-3 flex-shrink-0 " />
                   <div className="">
-                    <p>Delivery in 2 Days for $75 </p>
+                    <p>Delivery in 2 Days for KSh 350</p>
                   </div>
                 </div>
                 <Circle className="w-5 h-5 ms-3 flex-shrink-0" />
@@ -146,7 +146,7 @@ export default function ShippingDetailsForm() {
                 type="radio"
                 id="hosting-big"
                 name="hosting"
-                value="90"
+                value="500"
                 class="hidden peer"
                 onChange={(e) => setShippingCost(e.target.value)}
               />
@@ -157,7 +157,7 @@ export default function ShippingDetailsForm() {
                 <div className="flex gap-2 items-center">
                   <Truck className="w-8 h-8 ms-3 flex-shrink-0 " />
                   <div className="">
-                    <p>Delivery in 1 Day for $90</p>
+                    <p>Delivery in 1 Day for KSh 500</p>
                   </div>
                 </div>
                 <Circle className="w-5 h-5 ms-3 flex-shrink-0" />

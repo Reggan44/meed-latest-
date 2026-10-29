@@ -1,4 +1,6 @@
 import { getData } from "@/lib/getData";
+import { deliveryDays } from "@/lib/shipping";
+import PaymentStatus from "@/components/frontend/PaymentStatus";
 import { Item } from "@radix-ui/react-dropdown-menu";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
@@ -35,9 +37,12 @@ export default async function page({ params: { id } }) {
                     We received your order!
                   </h1>
                   <p className="mt-2 text-sm font-normal text-gray-600 dark:text-slate-300">
-                    Your order #{order.orderNumber} is completed and ready to
-                    ship
+                    Your order #{order.orderNumber} has been placed.
                   </p>
+                  <PaymentStatus
+                    orderId={order.id}
+                    initialStatus={order.paymentStatus}
+                  />
                 </div>
 
                 <div className="py-8">
@@ -102,14 +107,14 @@ export default async function page({ params: { id } }) {
                                     {item.title}
                                   </p>
                                   <p className="text-[13px] font-medium text-gray-500">
-                                    $({item.price}x{item.quantity})
+                                    KSh {item.price} x {item.quantity}
                                   </p>
                                 </div>
                               </div>
 
                               <div className="ml-auto">
                                 <p className="text-sm font-bold text-right text-gray-900 dark:text-gray-300">
-                                  ${(item.price * item.quantity).toFixed(2)}
+                                  KSh {(item.price * item.quantity).toFixed(2)}
                                 </p>
                               </div>
                             </li>
@@ -126,7 +131,7 @@ export default async function page({ params: { id } }) {
                         Sub total
                       </p>
                       <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                        ${subTotal}
+                        KSh {subTotal}
                       </p>
                     </li>
                     <li className="flex items-center justify-between">
@@ -135,15 +140,10 @@ export default async function page({ params: { id } }) {
                       </p>
                       <p className="text-[13px] font-medium text-gray-500">
                         The Order will be delivered in{" "}
-                        {order.shippingCost == 50
-                          ? "3"
-                          : order.shippingCost == 75
-                          ? "2"
-                          : "1"}{" "}
-                        days{" "}
+                        {deliveryDays(order.shippingCost)} days{" "}
                       </p>
                       <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                        ${parseFloat(order?.shippingCost).toFixed(2)}
+                        KSh {parseFloat(order?.shippingCost).toFixed(2)}
                       </p>
                     </li>
                     <li className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export default async function page({ params: { id } }) {
                         Total
                       </p>
                       <p className="text-base font-bold text-gray-900 dark:text-white">
-                        $
+                        KSh{" "}
                         {(
                           Number(subTotal) + parseFloat(order?.shippingCost)
                         ).toFixed(2)}

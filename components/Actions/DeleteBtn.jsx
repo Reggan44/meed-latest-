@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 export default function DeleteBtn({ endpoint, title }) {
   const [loading, setLoading] = useState(false);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = "";
   const router = useRouter();
   console.log(endpoint);
   // const confirmed = confirm("Are you sure?");

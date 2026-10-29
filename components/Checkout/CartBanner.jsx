@@ -22,7 +22,7 @@ export default function CartBanner() {
             </div>
             <p className="ml-3 text-base font-normal text-gray-900">
               You have {cartItems.length} items in cart. Sub total is{" "}
-              <span className="font-bold">${subTotal}</span>
+              <span className="font-bold">KSh {subTotal}</span>
             </p>
           </div>
 

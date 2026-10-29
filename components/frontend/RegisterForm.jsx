@@ -25,8 +25,7 @@ export default function RegisterForm({ role = "USER" }) {
     try {
       console.log(data);
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      const response = await fetch(`${baseUrl}/api/users`, {
+      const response = await fetch(`/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,7 +122,7 @@ export default function RegisterForm({ role = "USER" }) {
         </p>
         {role === "USER" ? (
           <p className="text-[0.75rem] font-light text-gray-500 dark:text-gray-400 py-4">
-            Are you a Farmer ?{" "}
+            Want to sell on Meed ?{" "}
             <Link
               href="/farmer-pricing"
               className="font-medium text-purple-600 hover:underline dark:text-purple-500"
@@ -133,7 +132,7 @@ export default function RegisterForm({ role = "USER" }) {
           </p>
         ) : (
           <p className="text-[0.75rem] font-light text-gray-500 dark:text-gray-400 py-4">
-            Are you a User ?{" "}
+            Want to shop ?{" "}
             <Link
               href="/register"
               className="font-medium text-purple-600 hover:underline dark:text-purple-500"

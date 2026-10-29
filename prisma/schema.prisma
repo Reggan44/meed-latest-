@@ -127,6 +127,12 @@ enum UserRole {
   MODERATOR
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 enum OrderStatus {
   PENDING
   PROCESSING
@@ -222,6 +228,11 @@ model Order {
   orderNumber   String?
   //Payment Method
   paymentMethod String
+  paymentStatus   PaymentStatus? @default(PENDING)
+  paymentProvider String?
+  paymentRef      String? // IntaSend invoice id
+  paymentCurrency String?       @default("KES")
+  paidAt          DateTime?
 
   // Order Items
   orderItems OrderItem[]

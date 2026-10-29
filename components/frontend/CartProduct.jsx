@@ -54,9 +54,9 @@ export default function CartProduct({ cartItem }) {
       </div>
       <div className="flex items-center gap-2">
         <div className="flex flex-col justify-center">
-          <h4>${(cartItem.salePrice * cartItem.qty).toFixed(2)}</h4>
+          <h4>KSh {(cartItem.salePrice * cartItem.qty).toFixed(2)}</h4>
           <p className="text-[10px] text-gray-300">
-            (${cartItem.salePrice}x {cartItem.qty})
+            (KSh {cartItem.salePrice}x {cartItem.qty})
           </p>
         </div>
         <button onClick={() => handleCartItemDelete(cartItem.id)}>

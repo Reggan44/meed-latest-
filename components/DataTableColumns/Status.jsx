@@ -19,7 +19,7 @@ export default function Status({ row, accessorKey }) {
     console.log(data);
     try {
       setLoading(true);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      const baseUrl = "";
       const response = await fetch(`${baseUrl}/api/farmers/${userId}`, {
         method: "PUT",
         headers: {

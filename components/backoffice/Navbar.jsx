@@ -27,7 +27,7 @@ export default function Navbar({ setShowSidebar, showSidebar }) {
   const { data: session, status } = useSession();
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
-    const base = process.env.NEXT_PUBLIC_BASE_URL;
+    const base = "";
     async function load() {
       try {
         const [pRes, oRes] = await Promise.all([

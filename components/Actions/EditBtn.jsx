@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 export default function EditBtn({ editEndpoint, title }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = "";
 
   return (
     <Link

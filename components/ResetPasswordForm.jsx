@@ -18,7 +18,7 @@ export default function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(data) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const baseUrl = "";
     const id = searchParams.get("id");
     data.id = id;
     data.token = searchParams.get("token");
