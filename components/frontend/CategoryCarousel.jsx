@@ -26,8 +26,8 @@ export default function CategoryCarousel({ products, isMarketPage = false }) {
   };
   return (
     <Carousel
-      swipeable={false}
-      draggable={false}
+      swipeable
+      draggable
       showDots={true}
       responsive={responsive}
       ssr={true} // means to render carousel on server-side.
@@ -41,7 +41,7 @@ export default function CategoryCarousel({ products, isMarketPage = false }) {
       removeArrowOnDeviceType={["tablet", "mobile"]}
       // deviceType={}
       dotListClass="custom-dot-list-style"
-      itemClass="px-4"
+      itemClass="px-1 sm:px-2"
     >
       {products.map((product, i) => {
         return <Product product={product} key={i} />;

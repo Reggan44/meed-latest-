@@ -8,12 +8,12 @@ import { getBanners } from "@/lib/storefront";
 export default async function Hero() {
   const banners = await getBanners();
   return (
-    <div className="grid grid-cols-12 gap-x-0 gap-y-4 sm:gap-8 mb-6 ">
+    <div className="mb-6 grid grid-cols-12 gap-4 lg:gap-8">
       <SidebarCategories />
-      <div className="col-span-full sm:col-span-7 bg-blue-600 rounded-md">
+      <div className="col-span-full overflow-hidden rounded-md bg-blue-600 lg:col-span-7">
         <HeroCarousel banners={banners} />
       </div>
-      <div className="col-span-2 hidden sm:block bg-white p-3 dark:bg-slate-800 rounded-lg">
+      <div className="col-span-2 hidden rounded-lg bg-white p-3 dark:bg-slate-800 lg:col-span-2 lg:block">
         <Link href="/support" className="flex items-center space-x-1 mb-3">
           <HelpCircle className="shrink-0 w-5 h-5 dark:text-lime-500 text-slate-900" />
           <div className="flex flex-col">

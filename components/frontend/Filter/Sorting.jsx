@@ -33,27 +33,33 @@ export default function Sorting({ title, slug, isSearch }) {
     },
   ];
   return (
-    <div className="flex items-center justify-between">
-      {/* <h2 className="text-2xl">Search Results - Electronic</h2> */}
-      <h2 className="text-2xl font-medium ">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <h2 className="break-words text-xl font-medium sm:text-2xl">
         {isSearch && "Search Results - "}
         {title}
       </h2>
-      <div className="flex text-sm items-center gap-3">
-        <p>Sort by:</p>
-        <div className="flex items-center">
+      <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:gap-3">
+        <p className="shrink-0">Sort by:</p>
+        <div className="flex flex-wrap items-center">
           {sortingLinks.map((link, i) => {
             return (
               <Link
                 key={i}
-                className={`${
+                className={`whitespace-nowrap text-xs sm:text-sm ${
                   link.sort === sortParam
                     ? "bg-slate-800 px-2 py-1 border border-lime-400 text-lime-400"
                     : "border border-slate-500 px-2 py-1"
                 }`}
                 href={link.href}
               >
-                {link.title}
+                <span className="sm:hidden">
+                  {link.sort === "desc"
+                    ? "High to low"
+                    : link.sort === "asc"
+                      ? "Low to high"
+                      : "Relevance"}
+                </span>
+                <span className="hidden sm:inline">{link.title}</span>
               </Link>
             );
           })}

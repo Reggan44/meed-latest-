@@ -19,6 +19,7 @@ export default function ProductImageCarousel({
     "https://swiperjs.com/demos/images/nature-6.jpg",
   ],
   thumbnail,
+  altText,
 }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
@@ -26,7 +27,7 @@ export default function ProductImageCarousel({
       {productImages.length <= 0 ? (
         <Image
           src={thumbnail}
-          alt={""}
+          alt={altText}
           width={556}
           height={5556}
           className="w-full"
@@ -47,7 +48,7 @@ export default function ProductImageCarousel({
             {productImages.map((image, i) => {
               return (
                 <SwiperSlide key={i}>
-                  <img src={image} />
+                  <img src={image} alt={altText} className="aspect-square h-auto w-full object-contain" />
                 </SwiperSlide>
               );
             })}
@@ -64,7 +65,7 @@ export default function ProductImageCarousel({
             {productImages.map((image, i) => {
               return (
                 <SwiperSlide key={i}>
-                  <img src={image} />
+                  <img src={image} alt={altText} className="aspect-square h-auto w-full object-cover" />
                 </SwiperSlide>
               );
             })}

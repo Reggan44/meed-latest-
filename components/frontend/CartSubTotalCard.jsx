@@ -22,7 +22,7 @@ export default function CartSubTotalCard({ subTotal }) {
       <div className="mt-8">
         <Link
           href="/checkout"
-          className=" text-slate-50 rounded-lg py-3 px-6 font-normal bg-slate-900 dark:bg-green-600"
+          className="block w-full rounded-lg bg-slate-900 px-6 py-3 text-center font-normal text-slate-50 dark:bg-green-600"
         >
           Continue to Checkout
         </Link>

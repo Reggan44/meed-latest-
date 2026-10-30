@@ -9,10 +9,10 @@ export default function Layout({ children }) {
     <div className="flex">
       {/* sidebar */}
       <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-      <div className="lg:ml-64 ml-0 flex-grow bg-slate-100 dark:bg-slate-900 min-h-screen">
+      <div className="lg:ml-64 ml-0 min-w-0 flex-grow bg-slate-100 dark:bg-slate-900 min-h-screen">
         {/* Header */}
         <Navbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-        <main className="p-8 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-50 min-h-screen mt-16">
+        <main className="p-4 sm:p-8 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-50 min-h-screen mt-16">
           {children}
         </main>
         {/* Main */}

@@ -15,7 +15,7 @@ export default function AddToCartButton({ product }) {
   return (
     <button
       onClick={() => handleAddToCart()}
-      className="flex items-center space-x-2 bg-lime-600 px-4 py-2 rounded-md text-white"
+      className="flex min-h-11 w-full items-center justify-center space-x-2 rounded-md bg-lime-600 px-4 py-2 text-white sm:w-auto"
     >
       <BaggageClaim />
       <span>Add to Cart</span>

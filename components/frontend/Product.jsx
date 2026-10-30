@@ -28,7 +28,7 @@ export default function Product({ product, inGrid = false }) {
     toast.success("Item added Successfully");
   }
   return (
-    <div className={`group ${inGrid ? "" : "mr-3"} flex flex-col rounded-lg bg-white dark:bg-slate-900 overflow-hidden border border-slate-200 dark:border-slate-700`}>
+    <div className="group flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
       <Link
         href={`/products/${product.slug}`}
         className="relative block aspect-[4/5] bg-slate-100 dark:bg-slate-800"
@@ -68,12 +68,12 @@ export default function Product({ product, inGrid = false }) {
             {product.title}
           </h2>
         </Link>
-        <div className="flex items-baseline gap-2">
-          <p className="font-semibold text-slate-900 dark:text-white">
+        <div className="flex flex-wrap items-baseline gap-x-2">
+          <p className="text-sm font-semibold text-slate-900 dark:text-white sm:text-base">
             {money(product.salePrice)}
           </p>
           {hasDiscount && (
-            <p className="text-xs text-slate-500 line-through">
+            <p className="text-[11px] text-slate-500 line-through sm:text-xs">
               {money(product.productPrice)}
             </p>
           )}
@@ -81,10 +81,10 @@ export default function Product({ product, inGrid = false }) {
         <button
           onClick={handleAddToCart}
           disabled={soldOut}
-          className="mt-auto flex w-full items-center justify-center gap-2 rounded-md bg-lime-600 px-4 py-2 text-sm text-white hover:bg-lime-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+          className="mt-auto flex min-h-10 w-full items-center justify-center gap-1.5 rounded-md bg-lime-600 px-2 py-2 text-xs text-white hover:bg-lime-700 disabled:cursor-not-allowed disabled:bg-slate-400 sm:gap-2 sm:px-4 sm:text-sm"
         >
-          <BaggageClaim className="w-4 h-4" />
-          <span>{soldOut ? "Sold out" : "Add to cart"}</span>
+          <BaggageClaim className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">{soldOut ? "Sold out" : "Add to cart"}</span>
         </button>
       </div>
     </div>

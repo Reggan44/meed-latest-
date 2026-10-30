@@ -12,11 +12,11 @@ export default function Breadcrumb({ title, resultCount }) {
   const endRange = Math.min(currentPage * pageSize, resultCount);
 
   return (
-    <div className="flex items-center justify-between text-xs">
-      <div className="flex items-center">
+    <div className="flex flex-col gap-1 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-w-0 items-center">
         <Link href="/">Home</Link>
-        <ChevronRight className="w-5 h-5" />
-        <p>{title}</p>
+        <ChevronRight className="h-5 w-5 shrink-0" />
+        <p className="truncate">{title}</p>
       </div>
       <p>
         {startRange}-{endRange} of {resultCount} results

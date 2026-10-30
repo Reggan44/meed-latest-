@@ -31,26 +31,27 @@ export default async function ProductDetailPage({ params: { slug } }) {
         <ProductImageCarousel
           productImages={product.productImages}
           thumbnail={product.imageUrl}
+          altText={product.title}
         />
         <div className="col-span-12 md:col-span-6 lg:col-span-6 min-w-0">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl lg:text-3xl font-semibold">
+          <div className="mb-6 flex items-start justify-between gap-3">
+            <h2 className="min-w-0 break-words text-xl font-semibold lg:text-3xl">
               {product.title}
             </h2>
             <ProductShareButton urlToShare={urlToShare} />
           </div>
           <div className="border-b border-gray-500">
             <p className="py-2 ">{product.description}</p>
-            <div className="flex items-center gap-8 mb-4">
-              <p>SKU: {product.sku}</p>
-              <p className="bg-lime-200 py-1.5 px-4 rounded-full text-slate-900 ">
+            <div className="mb-4 flex flex-wrap items-center gap-3 sm:gap-8">
+              <p className="break-all">SKU: {product.sku}</p>
+              <p className="rounded-full bg-lime-200 px-4 py-1.5 text-slate-900">
                 <b>Stock</b>: {product.productStock}
               </p>
             </div>
           </div>
-          <div className="flex items-center justify-between gap-4 pt-4 border-b border-gray-500 pb-4">
-            <div className="flex items-center gap-4">
-              <h4 className="text-2xl">Ksh {product.salePrice}</h4>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-500 pb-4 pt-4">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+              <h4 className="text-xl sm:text-2xl">Ksh {product.salePrice}</h4>
               <del className="text-slate-400 text-sm">
                 Ksh {product.productPrice}
               </del>
@@ -62,7 +63,7 @@ export default async function ProductDetailPage({ params: { slug } }) {
               </p>
             )}
           </div>
-          <div className="flex justify-between items-center py-6">
+          <div className="flex items-center justify-between py-6">
             <AddToCartButton product={product} />
           </div>
         </div>

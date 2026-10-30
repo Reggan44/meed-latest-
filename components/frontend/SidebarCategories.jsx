@@ -11,37 +11,53 @@ export default async function SidebarCategories() {
   );
   // console.log(categories);
   return (
-    <div className="sm:col-span-3 sm:block bg-white border border-gray-300 rounded-lg  dark:bg-gray-700 dark:border-gray-700 text-slate-800 overflow-hidden hidden">
-      <h2 className="bg-slate-100 dark:bg-gray-800 py-3 px-6 font-semibold border-b border-gray-300 dark:border-gray-600 text-slate-800 dark:text-slate-100">
-        Shop By Category ({categories.length})
-      </h2>
-      <div className="py-3 px-6 h-[300px] overflow-y-auto flex flex-col gap-2">
-        {categories.length > 0 &&
-          categories.map((category, i) => {
-            return (
-              <Link
-                key={i}
-                href={`/category/${category.slug}`}
-                className="flex items-center gap-3 hover:bg-slate-50 duration-300 transition-all dark:text-slate-300 dark:hover:bg-slate-600 rounded-md"
-              >
-                {category.imageUrl ? (
-                  <Image
-                    width={556}
-                    height={556}
-                    className="w-10 h-10 rounded-full object-cover border border-lime-300"
-                    src={category.imageUrl}
-                    alt={category.title}
-                  />
-                ) : (
-                  <span className="w-10 h-10 shrink-0 rounded-full bg-lime-600 text-white flex items-center justify-center font-semibold uppercase">
-                    {category.title?.[0]}
-                  </span>
-                )}
-                <span className="text-sm">{category.title}</span>
-              </Link>
-            );
-          })}
+    <>
+      <nav
+        aria-label="Shop by category"
+        className="col-span-full lg:hidden"
+      >
+        <p className="mb-2 text-sm font-semibold">Shop by category</p>
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/category/${category.slug}`}
+              className="shrink-0 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm dark:border-slate-600 dark:bg-slate-800"
+            >
+              {category.title}
+            </Link>
+          ))}
+        </div>
+      </nav>
+      <div className="hidden overflow-hidden rounded-lg border border-gray-300 bg-white text-slate-800 dark:border-gray-700 dark:bg-gray-700 lg:col-span-3 lg:block">
+        <h2 className="border-b border-gray-300 bg-slate-100 px-6 py-3 font-semibold text-slate-800 dark:border-gray-600 dark:bg-gray-800 dark:text-slate-100">
+          Shop By Category ({categories.length})
+        </h2>
+        <div className="flex h-[300px] flex-col gap-2 overflow-y-auto px-6 py-3">
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              href={`/category/${category.slug}`}
+              className="flex items-center gap-3 rounded-md transition-all duration-300 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-600"
+            >
+              {category.imageUrl ? (
+                <Image
+                  width={556}
+                  height={556}
+                  className="h-10 w-10 rounded-full border border-lime-300 object-cover"
+                  src={category.imageUrl}
+                  alt={category.title}
+                />
+              ) : (
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lime-600 font-semibold uppercase text-white">
+                  {category.title?.[0]}
+                </span>
+              )}
+              <span className="text-sm">{category.title}</span>
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
