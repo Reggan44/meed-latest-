@@ -5,11 +5,17 @@ import React from "react";
 
 export default function OrderCard({ order }) {
   const orderCreationDate = convertIsoDateToNormal(order.createdAt);
-  const subTotal = order?.orderItems
-    .reduce((total, item) => total + item.price * item.quantity, 0)
-    .toFixed(2);
+  const itemsTotal = order?.orderItems
+    ? order.orderItems.reduce((total, item) => total + item.price * item.quantity, 0)
+    : 0;
+  const shippingCost = Number(order?.shippingCost || 0);
+  const grandTotal = itemsTotal + shippingCost;
+  const formattedTotal = grandTotal.toLocaleString("en-KE", { minimumFractionDigits: 2 });
 
-  if (order.orderItems.length === 0) {
+  const paymentStatus = order.paymentStatus || "PENDING";
+  const isPaid = paymentStatus === "PAID";
+
+  if (!order.orderItems || order.orderItems.length === 0) {
     return null;
   }
 
@@ -40,34 +46,43 @@ export default function OrderCard({ order }) {
                   Total Amount
                 </p>
                 <p className="text-sm font-bold text-gray-900 mt-0.5">
-                  ${subTotal}
+                  KSh {formattedTotal}
                 </p>
+                {shippingCost > 0 && (
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    (incl. KSh {shippingCost} delivery)
+                  </p>
+                )}
               </div>
 
               <div>
                 <p className="text-sm font-medium text-gray-500">
-                  Order Status
+                  Payment Status
+                </p>
+                <div className="mt-1">
+                  {isPaid ? (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                      PAID
+                    </span>
+                  ) : paymentStatus === "FAILED" ? (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                      FAILED
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                      PENDING PAYMENT
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-500">
+                  Fulfillment
                 </p>
                 <div className="mt-0.5 flex items-center">
-                  <div className="inline-flex items-center justify-center flex-shrink-0 w-3 h-3 rounded-full text-white bg-amber-400 mr-1.5">
-                    <svg
-                      className="w-2 h-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
                   <span className="text-sm font-bold text-gray-900">
-                    {" "}
-                    {order.orderStatus}{" "}
+                    {order.orderStatus}
                   </span>
                 </div>
               </div>
@@ -76,84 +91,75 @@ export default function OrderCard({ order }) {
         </div>
 
         <div className="flex-1 px-4 py-6 sm:p-6 lg:p-8">
-          <ul className="space-y-7">
-            {order.orderItems.length > 0
-              ? order.orderItems.map((item, i) => {
-                  const slug = generateSlug(item.title);
-                  return (
-                    <li key={i} className="relative flex pb-10 sm:pb-0">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="object-cover rounded-lg w-28 h-28"
-                          src={item.imageUrl}
-                          alt={item.title}
-                        />
+          <ul className="divide-y divide-gray-100">
+            {order.orderItems.map((item, i) => {
+              const slug = generateSlug(item.title);
+              const formattedPrice = Number(item.price || 0).toLocaleString("en-KE");
+              return (
+                <li key={i} className="relative flex py-4 first:pt-0 last:pb-0">
+                  <div className="flex-shrink-0">
+                    <img
+                      className="object-cover rounded-lg w-20 h-20"
+                      src={item.imageUrl}
+                      alt={item.title}
+                    />
+                  </div>
+
+                  <div className="flex flex-col justify-between flex-1 ml-5">
+                    <div className="sm:grid sm:grid-cols-2 sm:gap-x-5">
+                      <div>
+                        <p className="text-base font-bold text-gray-900">
+                          {item.title}
+                        </p>
                       </div>
 
-                      <div className="flex flex-col justify-between flex-1 ml-5">
-                        <div className="sm:grid sm:grid-cols-2 sm:gap-x-5">
-                          <div>
-                            <p className="text-base font-bold text-gray-900">
-                              {item.title}
-                            </p>
-                            {/* <p className="mt-1.5 text-sm font-medium text-gray-500">
-                              Golden
-                            </p> */}
-                          </div>
-
-                          <div className="mt-4 sm:mt-0 flex items-center justify-between">
-                            <p className=" text-sm font-medium text-gray-500 me-4">
-                              {item.quantity}
-                            </p>
-                            <p className="text-base font-bold text-left text-gray-900 sm:text-right">
-                              ${item.price}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="absolute bottom-0 left-0 sm:relative">
-                          <div className="flex space-x-5">
-                            <Link
-                              href={`/products/${slug}`}
-                              title={item.title}
-                              className="p-1 -m-1 text-sm font-medium text-gray-500 transition-all duration-200 rounded hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                            >
-                              {" "}
-                              View Product{" "}
-                            </Link>
-
-                            <span className="text-gray-200"> | </span>
-
-                            <a
-                              href="#"
-                              title=""
-                              className="p-1 -m-1 text-sm font-medium text-gray-500 transition-all duration-200 rounded hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                            >
-                              {" "}
-                              Similar Product{" "}
-                            </a>
-                          </div>
-                        </div>
+                      <div className="mt-2 sm:mt-0 flex items-center justify-between sm:justify-end gap-4">
+                        <p className="text-sm font-medium text-gray-500">
+                          Qty: {item.quantity}
+                        </p>
+                        <p className="text-base font-bold text-gray-900">
+                          KSh {formattedPrice}
+                        </p>
                       </div>
-                    </li>
-                  );
-                })
-              : ""}
+                    </div>
+
+                    <div className="mt-3">
+                      <Link
+                        href={`/products/${slug}`}
+                        title={item.title}
+                        className="text-xs font-medium text-slate-600 hover:text-slate-900 hover:underline"
+                      >
+                        View Product
+                      </Link>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           <hr className="mt-8 border-gray-200" />
 
-          <div className="flex items-center mt-8 space-x-5">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900 transition-all duration-200 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 hover:bg-gray-100"
+          <div className="flex flex-wrap items-center mt-6 gap-3">
+            {!isPaid && (
+              <Link
+                href={`/order-confirmation/${order.id}`}
+                className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-slate-900 rounded-md hover:bg-slate-800 shadow-sm"
+              >
+                Pay Now (M-Pesa / Card)
+              </Link>
+            )}
+
+            <Link
+              href={`/order-confirmation/${order.id}`}
+              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
             >
-              View Order
-            </button>
+              Order Details
+            </Link>
 
             <Link
               href={`/dashboard/orders/${order.id}/invoice`}
-              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900 transition-all duration-200 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 hover:bg-gray-100"
+              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
             >
               View Invoice
             </Link>

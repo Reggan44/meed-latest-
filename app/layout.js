@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning className="dark">
       <body className="font-sans">
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Providers>{children}</Providers>

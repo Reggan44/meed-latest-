@@ -20,7 +20,6 @@ export default function RegisterForm({ role = "USER" }) {
   const [emailErr, setEmailErr] = useState("");
   async function onSubmit(data) {
     try {
-      console.log(data);
       setLoading(true);
       const response = await fetch(`/api/users`, {
         method: "POST",
@@ -31,7 +30,6 @@ export default function RegisterForm({ role = "USER" }) {
       });
       const responseData = await response.json();
       if (response.ok) {
-        console.log(responseData);
         setLoading(false);
         toast.success(role === "USER" ? "Account created" : "Application received");
         reset();

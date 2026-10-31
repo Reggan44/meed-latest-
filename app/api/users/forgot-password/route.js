@@ -35,14 +35,16 @@ export async function PUT(request) {
         resetTokenExpires: new Date(Date.now() + 60 * 60 * 1000),
       },
     });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://meedcollections.store";
+    const fromAddress = process.env.EMAIL_FROM || "Meed Collections <orders@meedcollections.store>";
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
-      from: "Desishub <info@jazzafricaadventures.com>",
+      from: fromAddress,
       to: email,
       subject: "Password Reset - Meed Collections",
       react: EmailTemplate({
         name: existingUser.name,
-        redirectUrl: `reset-password?token=${token}&id=${existingUser.id}`,
+        redirectUrl: `${baseUrl}/reset-password?token=${token}&id=${existingUser.id}`,
         linkText: "Reset Password",
         description:
           "Click on the following link in order to reset your password. The link expires in 1 hour.",

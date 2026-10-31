@@ -60,6 +60,14 @@ export async function POST(request) {
           { status: 400 }
         );
       }
+      if (product.productStock != null && product.productStock < qty) {
+        return NextResponse.json(
+          {
+            message: `Insufficient stock for "${product.title}". Only ${product.productStock} left in stock.`,
+          },
+          { status: 400 }
+        );
+      }
       lines.push({ product, qty });
     }
 
@@ -95,18 +103,8 @@ export async function POST(request) {
         })),
       });
 
-      await prisma.sale.createMany({
-        data: lines.map(({ product, qty }) => ({
-          orderId: newOrder.id,
-          productTitle: product.title,
-          productImage: product.imageUrl ?? "",
-          productPrice: product.salePrice,
-          productQty: qty,
-          productId: product.id,
-          vendorId: product.userId,
-          total: product.salePrice * qty,
-        })),
-      });
+      // NOTE: Sales are NOT recorded here anymore. They are created in lib/payments.js
+      // only when payment confirmation succeeds (paymentStatus === "PAID").
 
       return newOrder;
     });

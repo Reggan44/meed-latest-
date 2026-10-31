@@ -14,7 +14,6 @@ export default function OrderSummary() {
   const checkoutFormData = useSelector(
     (store) => store.checkout.checkoutFormData
   );
-  console.log(checkoutFormData);
   const currentStep = useSelector((store) => store.checkout.currentStep);
   const dispatch = useDispatch();
   function handlePrevious() {
