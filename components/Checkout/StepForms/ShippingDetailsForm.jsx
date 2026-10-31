@@ -28,16 +28,14 @@ export default function ShippingDetailsForm() {
       ...existingFormData,
     },
   });
-  const initialShippingCost = existingFormData.shippingCost || "";
+  const initialShippingCost = existingFormData.shippingCost ? String(existingFormData.shippingCost) : "200";
   const [shippingCost, setShippingCost] = useState(initialShippingCost);
-  // console.log(shippingCost);
 
   async function processData(data) {
-    data.shippingCost = shippingCost;
-    // console.log(data);
-    //Update the checkout Data
+    data.shippingCost = Number(shippingCost || 200);
+    // Update the checkout Data
     dispatch(updateCheckoutFormData(data));
-    //Update the Current Step
+    // Update the Current Step
     dispatch(setCurrentStep(currentStep + 1));
   }
   return (
@@ -102,7 +100,7 @@ export default function ShippingDetailsForm() {
                 name="hosting"
                 value="200"
                 className="hidden peer"
-                required
+                checked={String(shippingCost) === "200"}
                 onChange={(e) => setShippingCost(e.target.value)}
               />
               <label
@@ -126,6 +124,7 @@ export default function ShippingDetailsForm() {
                 name="hosting"
                 value="350"
                 class="hidden peer"
+                checked={String(shippingCost) === "350"}
                 onChange={(e) => setShippingCost(e.target.value)}
               />
               <label
@@ -148,6 +147,7 @@ export default function ShippingDetailsForm() {
                 name="hosting"
                 value="500"
                 class="hidden peer"
+                checked={String(shippingCost) === "500"}
                 onChange={(e) => setShippingCost(e.target.value)}
               />
               <label
