@@ -1,81 +1,78 @@
-import { ChevronRight } from "lucide-react";
+import { Boxes, CircleDollarSign, ShoppingCart, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-export default function OverviewCards({ sales, products }) {
+export default function OverviewCards({ sales = [], products = [] }) {
   const productsCount = products.length.toString().padStart(2, "0");
   const salesCount = sales.length.toString().padStart(2, "0");
-  const totalSales = sales.reduce((acc, item) => acc + item.total, 0);
+  const totalSales = sales.reduce((acc, item) => acc + (item.total || 0), 0);
+  
+  const lowStockCount = products
+    .filter((p) => p.productStock !== null && p.productStock <= 5)
+    .length.toString().padStart(2, "0");
+
   const analytics = [
     {
-      title: "Products",
+      title: "Listed Products",
       count: productsCount,
-      unit: "",
       link: "/dashboard/products",
-      icon: "",
+      icon: Boxes,
+      iconBg: "bg-blue-600 text-white dark:bg-blue-900 dark:text-blue-200",
     },
     {
-      title: "Sales",
+      title: "Units Sold",
       count: salesCount,
-      unit: "",
       link: "/dashboard/sales",
-      icon: "",
+      icon: ShoppingCart,
+      iconBg: "bg-purple-600 text-white dark:bg-purple-900 dark:text-purple-200",
     },
     {
-      title: "Total Revenue",
-      count: totalSales,
-      unit: "",
-      link: "/dashboard/sales",
-      icon: "",
+      title: "Gross Store Revenue",
+      count: `KSh ${totalSales.toLocaleString("en-KE", { maximumFractionDigits: 0 })}`,
+      link: "/dashboard/wallet",
+      icon: CircleDollarSign,
+      iconBg: "bg-green-600 text-white dark:bg-green-900 dark:text-green-200",
+    },
+    {
+      title: "Low Stock Warnings",
+      count: lowStockCount,
+      link: "/dashboard/products",
+      icon: AlertTriangle,
+      iconBg: "bg-amber-600 text-white dark:bg-amber-900 dark:text-amber-200",
     },
   ];
+
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       {analytics.map((item, i) => {
+        const Icon = item.icon;
         return (
           <div
             key={i}
-            className="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800"
+            className="flex flex-col bg-white border border-slate-200 shadow-sm rounded-2xl dark:bg-slate-900 dark:border-slate-800"
           >
             <div className="p-4 md:p-5 flex justify-between gap-x-3">
               <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500">
+                <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">
                   {item.title}
                 </p>
                 <div className="mt-1 flex items-center gap-x-2">
-                  <h3 className="mt-1 text-xl font-medium text-gray-800 dark:text-gray-200">
+                  <h3 className="mt-1 text-2xl font-black text-slate-900 dark:text-slate-100">
                     {item.count}
-                    {item.unit}
                   </h3>
                 </div>
               </div>
-              <div className="flex-shrink-0 flex justify-center items-center w-[46px] h-[46px] bg-blue-600 text-white rounded-full dark:bg-blue-900 dark:text-blue-200">
-                <svg
-                  className="flex-shrink-0 w-5 h-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 22h14" />
-                  <path d="M5 2h14" />
-                  <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" />
-                  <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
-                </svg>
+              <div
+                className={`flex-shrink-0 flex justify-center items-center w-11 h-11 rounded-xl ${item.iconBg}`}
+              >
+                <Icon className="w-5 h-5" />
               </div>
             </div>
-
             <Link
-              className="py-3 px-4 md:px-5 inline-flex justify-between items-center text-sm text-gray-600 border-t border-gray-200 hover:bg-gray-50 rounded-b-xl dark:border-gray-700 dark:text-gray-400 dark:hover:bg-slate-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
               href={item.link}
+              className="py-3 px-4 md:px-5 inline-flex justify-between items-center text-xs font-semibold rounded-b-2xl border-t border-slate-100 dark:border-slate-800 text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800/50 transition"
             >
-              View reports
-              <ChevronRight className="flex-shrink-0 w-4 h-4" />
+              View Details →
             </Link>
           </div>
         );

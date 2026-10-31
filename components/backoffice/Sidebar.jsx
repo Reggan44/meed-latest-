@@ -9,14 +9,17 @@ import {
   ChevronDown,
   ChevronRight,
   CircleDollarSign,
+  ClipboardList,
   ExternalLink,
   HeartHandshake,
   LayoutGrid,
   LayoutList,
   LogOut,
   MonitorPlay,
+  Package,
   ScanSearch,
   SendToBack,
+  ShoppingBag,
   Slack,
   Truck,
   User,
@@ -116,7 +119,12 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
   if (role === "VENDOR") {
     sidebarLinks = [
       {
-        title: "Sales",
+        title: "Orders Received",
+        icon: ClipboardList,
+        href: "/dashboard/orders",
+      },
+      {
+        title: "Sales Analytics",
         icon: Truck,
         href: "/dashboard/sales",
       },
@@ -143,8 +151,8 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
     ];
     catalogueLinks = [
       {
-        title: "Products",
-        icon: Boxes,
+        title: "My Products",
+        icon: Package,
         href: "/dashboard/products",
       },
       {
@@ -158,12 +166,12 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
     sidebarLinks = [
       {
         title: "My Orders",
-        icon: Truck,
+        icon: ShoppingBag,
         href: "/dashboard/orders",
       },
       {
         title: "Profile",
-        icon: Truck,
+        icon: User,
         href: "/dashboard/profile",
       },
       {

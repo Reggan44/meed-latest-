@@ -29,11 +29,11 @@ export default function UserAvatar({ user = {} }) {
         <button>
           {image ? (
             <Image
-              src="/profile.JPG"
+              src={image}
               alt="User profile"
               width={200}
               height={200}
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8 rounded-full object-cover"
             />
           ) : (
             <div className="w-10 h-10 p-4 flex items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800 shadow-md border border-slate-600">

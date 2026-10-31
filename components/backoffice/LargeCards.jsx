@@ -29,7 +29,6 @@ export default function LargeCards({ sales }) {
       return saleDate >= thisMonthStart && saleDate <= today;
     })
     .reduce((acc, sale) => acc + sale.total, 0);
-  console.log(todaySales, thisWeekSales, thisMonthSales);
   const totalSales =
     sales.reduce((acc, item) => acc + item.total, 0).toFixed(2) ?? 0;
   const orderStats = [
